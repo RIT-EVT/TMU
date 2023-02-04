@@ -1,3 +1,3 @@
 #include <TMU.hpp>
 
-namespace BOARD_NAME {}
+namespace TMU {}

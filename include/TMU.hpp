@@ -1,13 +1,13 @@
 #pragma once
 
-namespace BOARD_NAME {
+namespace TMU {
 
 /**
- * This is an example of a class for a board
+ * This class holds necessary data and behavior for the TMU
  */
-class BOARD_NAME {
+class TMU {
 public:
 private:
 };
 
-}// namespace BOARD_NAME
+}// namespace TMU
