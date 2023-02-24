@@ -1,5 +1,5 @@
 ###############################################################################
-# Top level CMakeList for building the *EVT_BOARD_NAME* source code
+# Top level CMakeList for building the TMU source code
 ###############################################################################
 cmake_minimum_required(VERSION 3.15)
 
