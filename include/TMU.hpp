@@ -35,7 +35,7 @@ private:
     /**
      * Object Dictionary Size
      */
-    static constexpr uint16_t OBJECT_DICTIONARY_SIZE = 20;
+    static constexpr uint16_t OBJECT_DICTIONARY_SIZE = 21;
 
     /**
      * CAN Open object dictionary
@@ -185,6 +185,7 @@ private:
             .Type = nullptr,
             .Data = (uintptr_t) &thermTemps[3],
         },
+        CO_OBJ_DIR_ENDMARK,
     };
 };
 
