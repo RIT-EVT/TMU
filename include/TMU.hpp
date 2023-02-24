@@ -25,10 +25,21 @@ public:
      * @return size of the Object Dictionary
      */
     uint16_t getObjectDictionarySize() const;
+
 private:
-    static constexpr uint16_t OBJECT_DICTIONARY_SIZE = 30;
+    /**
+     * Stores the 4 16-bit temperature values.
+     */
     uint16_t thermTemps[4] = {};
 
+    /**
+     * Object Dictionary Size
+     */
+    static constexpr uint16_t OBJECT_DICTIONARY_SIZE = 20;
+
+    /**
+     * CAN Open object dictionary
+     */
     CO_OBJ_T objectDictionary[OBJECT_DICTIONARY_SIZE + 1] = {
         // Sync ID, defaults to 0x80
         {
@@ -171,7 +182,6 @@ private:
             .Type = nullptr,
             .Data = (uintptr_t) &thermTemps[3]
         },
-
     };
 };
 
