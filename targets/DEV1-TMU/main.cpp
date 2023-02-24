@@ -10,8 +10,8 @@
 #include <EVT/io/CANopen.hpp>
 #include <EVT/io/UART.hpp>
 #include <EVT/io/pin.hpp>
-#include <EVT/utils/log.hpp>
 #include <EVT/manager.hpp>
+#include <EVT/utils/log.hpp>
 #include <EVT/utils/time.hpp>
 
 #include <EVT/dev/MCUTimer.hpp>
