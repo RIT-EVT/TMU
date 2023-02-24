@@ -103,7 +103,8 @@ private:
         {
             .Key = CO_KEY(0x1800, 0, CO_UNSIGNED8 | CO_OBJ_D__R_),
             .Type = nullptr,
-            .Data = (uintptr_t) 5,},
+            .Data = (uintptr_t) 5,
+        },
         {//180h+Node-ID
          .Key = CO_KEY(0x1800, 1, CO_UNSIGNED32 | CO_OBJ_D__R_),
          .Type = nullptr,
