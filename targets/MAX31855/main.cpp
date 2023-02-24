@@ -1,15 +1,14 @@
 #include "EVT/utils/time.hpp"
-#include <dev/MAX31855.h>
 #include <EVT/io/UART.hpp>
 #include <EVT/io/manager.hpp>
 #include <EVT/io/pin.hpp>
+#include <dev/MAX31855.h>
 
 namespace IO = EVT::core::IO;
 
 constexpr uint32_t SPI_SPEED = SPI_SPEED_1MHZ;
 constexpr uint8_t deviceCount = 1;
 IO::GPIO* devices[deviceCount];
-
 
 int main() {
     IO::init();
@@ -26,8 +25,9 @@ int main() {
 
     uart.printf("read start:\r\n");
     while (true) {
-        uint16_t temp = MAX.readTemp();;
-        uart.printf("%d.%02d\r\n", temp/100, temp%100);
+        uint16_t temp = MAX.readTemp();
+        ;
+        uart.printf("%d.%02d\r\n", temp / 100, temp % 100);
         EVT::core::time::wait(200);
     }
 }
