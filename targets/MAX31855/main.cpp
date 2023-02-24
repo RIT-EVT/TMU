@@ -1,4 +1,4 @@
-#include "EVT/utils/time.hpp"
+#include <EVT/utils/time.hpp>
 #include <EVT/io/UART.hpp>
 #include <EVT/io/manager.hpp>
 #include <EVT/io/pin.hpp>
@@ -21,12 +21,11 @@ int main() {
     IO::SPI& spi = IO::getSPI<IO::Pin::SPI_SCK, IO::Pin::SPI_MOSI, IO::Pin::SPI_MISO>(devices, deviceCount);
     spi.configureSPI(SPI_SPEED, SPI_MODE0, SPI_MSB_FIRST);
 
-    DEV::MAX31855 MAX(spi);
+    DEV::MAX31855 MAX(spi, 0);
 
     uart.printf("read start:\r\n");
     while (true) {
         uint16_t temp = MAX.readTemp();
-        ;
         uart.printf("%d.%02d\r\n", temp / 100, temp % 100);
         EVT::core::time::wait(200);
     }

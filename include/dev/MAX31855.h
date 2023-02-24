@@ -3,8 +3,8 @@
 
 #endif//TMU_MAX31856_H
 
-#include "EVT/io/SPI.hpp"
-#include "cstdint"
+#include <EVT/io/SPI.hpp>
+#include <cstdint>
 
 using namespace EVT::core::IO;
 namespace DEV {
@@ -18,8 +18,9 @@ public:
      * Creates a new MAX31855 which will read a raw ADC temp.
      *
      * @param[in] spi The SPI to use to communicate with the MAX31855
+     * @param[in] device The device we are communicating with
      */
-    explicit MAX31855(SPI& spi);
+    explicit MAX31855(SPI& spi, uint8_t device);
 
     /**
      * Returns the temp in celsius
@@ -31,6 +32,8 @@ public:
 private:
     /** The SPI interface to read from */
     SPI& spi;
+    /** The device for SPI */
+    uint8_t device;
 };
 
 }
