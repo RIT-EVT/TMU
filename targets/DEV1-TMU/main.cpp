@@ -96,7 +96,7 @@ int main() {
     DEV::Timerf302x8 timer(TIM2, 100);
     timer.stopTimer();
 
-    TMU::TMU tmu{};
+    TMU::TMU tmu;
 
     /**
      * Initialize CAN
