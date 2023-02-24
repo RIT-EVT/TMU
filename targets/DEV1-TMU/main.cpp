@@ -95,8 +95,6 @@ int main() {
 
     // Initialize the timer
     DEV::Timer& timer = DEV::getTimer<DEV::MCUTimer::Timer2>(100);
-    timer.stopTimer();
-
     TMU::TMU tmu;
 
     /**
