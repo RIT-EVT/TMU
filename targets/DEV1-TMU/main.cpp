@@ -6,15 +6,15 @@
 
 #include <Canopen/co_core.h>
 #include <Canopen/co_tmr.h>
+#include <EVT/dev/Timer.hpp>
 #include <EVT/io/CANopen.hpp>
 #include <EVT/io/UART.hpp>
 #include <EVT/io/manager.hpp>
 #include <EVT/io/pin.hpp>
 #include <EVT/utils/log.hpp>
-#include <EVT/dev/Timer.hpp>
 
-#include <TMU.hpp>
 #include <EVT/dev/platform/f3xx/f302x8/Timerf302x8.hpp>
+#include <TMU.hpp>
 
 namespace IO = EVT::core::IO;
 namespace log = EVT::core::log;
@@ -101,7 +101,7 @@ int main() {
     /**
      * Initialize CAN
      */
-     //Will store CANopen messages that will be populated by the EVT-core CAN interrupt
+    //Will store CANopen messages that will be populated by the EVT-core CAN interrupt
     EVT::core::types::FixedQueue<CANOPEN_QUEUE_SIZE, IO::CANMessage> canOpenQueue;
 
     // Initialize CAN, add an IRQ which will add messages to the queue above

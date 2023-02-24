@@ -8,4 +8,4 @@ CO_OBJ_T* TMU::getObjectDictionary() {
 uint16_t TMU::getObjectDictionarySize() const {
     return OBJECT_DICTIONARY_SIZE;
 }
-}
+}// namespace TMU
