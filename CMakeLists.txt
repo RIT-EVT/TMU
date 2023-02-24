@@ -43,6 +43,7 @@ add_library(${PROJECT_NAME} STATIC)
 # Add sources
 target_sources(${PROJECT_NAME} PRIVATE
         src/TMU.cpp
+        src/dev/MAX31855.cpp
         )
 
 ###############################################################################

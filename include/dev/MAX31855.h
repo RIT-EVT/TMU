@@ -7,7 +7,7 @@
 #include "cstdint"
 
 using namespace EVT::core::IO;
-namespace MAX31855 {
+namespace DEV {
 
 /**
  * Handles reading temp data from the MAX31855 ADC
@@ -20,12 +20,14 @@ public:
      * @param[in] spi The SPI to use to communicate with the MAX31855
      */
     explicit MAX31855(SPI& spi);
+
     /**
      * Returns the temp in celsius
      *
      * @return The temp
      */
     int16_t readTemp();
+
 private:
     /** The SPI interface to read from */
     SPI& spi;

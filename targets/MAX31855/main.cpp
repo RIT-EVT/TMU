@@ -1,5 +1,5 @@
 #include "EVT/utils/time.hpp"
-#include "dev/MAX31855.h"
+#include <dev/MAX31855.h>
 #include <EVT/io/UART.hpp>
 #include <EVT/io/manager.hpp>
 #include <EVT/io/pin.hpp>
@@ -22,7 +22,7 @@ int main() {
     IO::SPI& spi = IO::getSPI<IO::Pin::SPI_SCK, IO::Pin::SPI_MOSI, IO::Pin::SPI_MISO>(devices, deviceCount);
     spi.configureSPI(SPI_SPEED, SPI_MODE0, SPI_MSB_FIRST);
 
-    MAX31855::MAX31855 MAX(spi);
+    DEV::MAX31855 MAX(spi);
 
     uart.printf("read start:\r\n");
     while (true) {

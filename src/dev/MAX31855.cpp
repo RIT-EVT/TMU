@@ -1,10 +1,12 @@
-#include "dev/MAX31855.h"
+#include <dev/MAX31855.h>
 #include <EVT/io/SPI.hpp>
 
 using namespace EVT::core::IO;
-namespace MAX31855 {
 
-MAX31855::MAX31855(SPI& SPI) : spi(SPI) {}
+namespace DEV {
+
+MAX31855::MAX31855(SPI& spi) : spi(spi)  { }
+
 int16_t MAX31855::readTemp() {
     int16_t temp;
     const int length = 4;
