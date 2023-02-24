@@ -14,7 +14,7 @@ int16_t MAX31855::readTemp() {
     spi.endTransmission(0);
     temp = (((uint16_t)bytes[0]) << 8) | bytes[1];
     temp = temp >> 2; // lose last 2 bits as they aren't in the 14 bit temp
-    temp = (temp>>2)*100 + (temp&0x03)*25;
+    temp = (temp>>2)*100 + (temp&0x03)*25; // convert last 2 digits to allow for decimal place
     return temp;
 }
 
