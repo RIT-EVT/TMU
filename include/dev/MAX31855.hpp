@@ -1,3 +1,6 @@
+#ifndef TMU_MAX31855_H
+#define TMU_MAX31855_H
+
 #include <EVT/io/SPI.hpp>
 #include <cstdint>
 
@@ -35,7 +38,4 @@ private:
 
 }
 
-#ifndef TMU_MAX31855_H
-
-    #define TMU_MAX31855_H
 #endif//TMU_MAX31855_H
