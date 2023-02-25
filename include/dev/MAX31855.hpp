@@ -33,7 +33,7 @@ private:
     uint8_t device;
 };
 
-}
+}// namespace DEV
 
 #ifndef TMU_MAX31855_H
 
