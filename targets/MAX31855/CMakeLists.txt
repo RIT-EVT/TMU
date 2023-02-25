@@ -1,6 +1,6 @@
 include(${EVT_CORE_DIR}/cmake/evt-core_build.cmake)
 
-project(MAX31856)
+project(MAX31855)
 cmake_minimum_required(VERSION 3.15)
 
 make_exe(${PROJECT_NAME} main.cpp)

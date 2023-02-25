@@ -1,5 +1,5 @@
 #include <EVT/io/UART.hpp>
-#include <EVT/io/manager.hpp>
+#include <EVT/manager.hpp>
 #include <EVT/io/pin.hpp>
 #include <EVT/utils/time.hpp>
 #include <dev/MAX31855.hpp>
@@ -11,7 +11,7 @@ constexpr uint8_t deviceCount = 1;
 IO::GPIO* devices[deviceCount];
 
 int main() {
-    IO::init();
+    EVT::core::platform::init();
     // Setup IO
     IO::UART& uart = IO::getUART<IO::Pin::UART_TX, IO::Pin::UART_RX>(9600);
 

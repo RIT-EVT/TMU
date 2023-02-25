@@ -13,6 +13,9 @@ if(NOT TARGET_DEV)
     set(TARGET_DEV "STM32F334x8")
 endif()
 
+# Enable use of HAL Drivers
+add_compile_definitions(USE_HAL_DRIVER)
+
 set(EVT_CORE_DIR      ${CMAKE_SOURCE_DIR}/libs/EVT-core)
 
 # Link to the EVT-core library
