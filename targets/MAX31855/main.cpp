@@ -2,7 +2,7 @@
 #include <EVT/io/manager.hpp>
 #include <EVT/io/pin.hpp>
 #include <EVT/utils/time.hpp>
-#include <dev/MAX31855.h>
+#include <dev/MAX31855.hpp>
 
 namespace IO = EVT::core::IO;
 
