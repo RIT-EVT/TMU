@@ -1,5 +1,5 @@
-# TMU
+# Thermocouple Measurement Unit
 
 ## Introduction
 
-*One-paragraph summary of the board and its purpose on the bike*
+The Thermocouple Measurement Unit (TMU) is responsible for collecting and reporting temperature data from thermocouples around the bike.
