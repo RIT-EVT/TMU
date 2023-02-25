@@ -1,6 +1,6 @@
 #include <EVT/io/UART.hpp>
-#include <EVT/manager.hpp>
 #include <EVT/io/pin.hpp>
+#include <EVT/manager.hpp>
 #include <EVT/utils/time.hpp>
 #include <dev/MAX31855.hpp>
 
