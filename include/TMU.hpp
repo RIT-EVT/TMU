@@ -2,6 +2,10 @@
 
 #include <Canopen/co_core.h>
 #include <EVT/io/CANopen.hpp>
+#include <EVT/io/SPI.hpp>
+#include <dev/MAX31855.hpp>
+
+using namespace EVT::core::IO;
 
 namespace TMU {
 
@@ -10,6 +14,9 @@ namespace TMU {
  */
 class TMU {
 public:
+
+    explicit TMU(SPI& spi);
+
     static constexpr uint8_t NODE_ID = 0x09;
 
     /**
@@ -31,6 +38,16 @@ private:
      * Stores the 4 16-bit temperature values.
      */
     uint16_t thermTemps[4] = {};
+
+    SPI& spi;
+    DEV::MAX31855 MAXs[4] = {
+        DEV::MAX31855(spi, 0),
+        DEV::MAX31855(spi, 1),
+        DEV::MAX31855(spi, 2),
+        DEV::MAX31855(spi, 3)
+    };
+
+    void updateTemps();
 
     /**
      * Object Dictionary Size
