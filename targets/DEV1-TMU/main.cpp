@@ -113,7 +113,7 @@ int main() {
     devices[2]->writePin(IO::GPIO::State::HIGH);
     devices[3]->writePin(IO::GPIO::State::HIGH);
 
-    IO::SPI& spi = IO::getSPI<IO::Pin::SPI_SCK, IO::Pin::SPI_MOSI, IO::Pin::SPI_MISO>(devices, deviceCount);
+    IO::SPI& spi = IO::getSPI<IO::Pin::PA_5, IO::Pin::PA_7, IO::Pin::PA_6>(devices, deviceCount);
 
     spi.configureSPI(SPI_SPEED_1MHZ, SPI_MODE0, SPI_MSB_FIRST);
 
