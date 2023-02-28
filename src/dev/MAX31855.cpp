@@ -24,4 +24,4 @@ uint16_t MAX31855::readTemp() {
     return temp;
 }
 
-}// namespace DEV
+}// namespace TMU::DEV

@@ -121,8 +121,7 @@ int main() {
         TMU::DEV::MAX31855(spi, 0),
         TMU::DEV::MAX31855(spi, 1),
         TMU::DEV::MAX31855(spi, 2),
-        TMU::DEV::MAX31855(spi, 3)
-    };
+        TMU::DEV::MAX31855(spi, 3)};
 
     TMU::TMU tmu = TMU::TMU(therms);
 

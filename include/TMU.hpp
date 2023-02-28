@@ -14,12 +14,11 @@ namespace TMU {
  */
 class TMU {
 public:
-
     /**
      * Constructor takes an array 4 thermocouples
      * @param thermocouples the MAX31855 thermocouples
      */
-    explicit TMU (DEV::MAX31855 thermocouples[4]);
+    explicit TMU(DEV::MAX31855 thermocouples[4]);
 
     static constexpr uint8_t NODE_ID = 0x09;
 

@@ -36,6 +36,6 @@ private:
     uint8_t device;
 };
 
-}// namespace DEV
+}// namespace TMU::DEV
 
 #endif//TMU_MAX31855_H
