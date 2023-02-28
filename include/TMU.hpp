@@ -15,7 +15,11 @@ namespace TMU {
 class TMU {
 public:
 
-    explicit TMU(SPI& spi);
+    /**
+     * Constructor takes an array 4 thermocouples
+     * @param thermocouples the MAX31855 thermocouples
+     */
+    explicit TMU (DEV::MAX31855 thermocouples[4]);
 
     static constexpr uint8_t NODE_ID = 0x09;
 
@@ -33,21 +37,21 @@ public:
      */
     uint16_t getObjectDictionarySize() const;
 
+    /**
+     * Updates the thermTemps values
+     */
+    void updateTemps();
+
 private:
     /**
      * Stores the 4 16-bit temperature values.
      */
     uint16_t thermTemps[4] = {};
 
-    SPI& spi;
-    DEV::MAX31855 MAXs[4] = {
-        DEV::MAX31855(spi, 0),
-        DEV::MAX31855(spi, 1),
-        DEV::MAX31855(spi, 2),
-        DEV::MAX31855(spi, 3)
-    };
-
-    void updateTemps();
+    /**
+     * Stores the 4 MAX31855 thermocouples
+     */
+    DEV::MAX31855 thermocouples[4];
 
     /**
      * Object Dictionary Size

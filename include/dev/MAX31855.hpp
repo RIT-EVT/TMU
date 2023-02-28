@@ -6,7 +6,7 @@
 
 using namespace EVT::core::IO;
 
-namespace DEV {
+namespace TMU::DEV {
 
 /**
  * Handles reading temp data from the MAX31855 ADC

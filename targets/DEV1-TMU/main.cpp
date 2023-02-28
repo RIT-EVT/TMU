@@ -16,6 +16,7 @@
 
 #include <EVT/dev/MCUTimer.hpp>
 #include <TMU.hpp>
+#include <dev/MAX31855.hpp>
 
 namespace IO = EVT::core::IO;
 namespace log = EVT::core::log;
@@ -95,7 +96,36 @@ int main() {
 
     // Initialize the timer
     DEV::Timer& timer = DEV::getTimer<DEV::MCUTimer::Timer2>(100);
-    TMU::TMU tmu;
+
+    /**
+     * Initialize SPI
+     */
+    const uint8_t deviceCount = 4;
+    IO::GPIO* devices[deviceCount];
+
+    devices[0] = &IO::getGPIO<IO::Pin::PB_4>(EVT::core::IO::GPIO::Direction::OUTPUT);
+    devices[1] = &IO::getGPIO<IO::Pin::PB_5>(EVT::core::IO::GPIO::Direction::OUTPUT);
+    devices[2] = &IO::getGPIO<IO::Pin::PB_6>(EVT::core::IO::GPIO::Direction::OUTPUT);
+    devices[3] = &IO::getGPIO<IO::Pin::PB_7>(EVT::core::IO::GPIO::Direction::OUTPUT);
+
+    devices[0]->writePin(IO::GPIO::State::HIGH);
+    devices[1]->writePin(IO::GPIO::State::HIGH);
+    devices[2]->writePin(IO::GPIO::State::HIGH);
+    devices[3]->writePin(IO::GPIO::State::HIGH);
+
+    IO::SPI& spi = IO::getSPI<IO::Pin::SPI_SCK, IO::Pin::SPI_MOSI, IO::Pin::SPI_MISO>(devices, deviceCount);
+
+    spi.configureSPI(SPI_SPEED_1MHZ, SPI_MODE0, SPI_MSB_FIRST);
+
+    TMU::DEV::MAX31855 therms[4] = {
+        TMU::DEV::MAX31855(spi, 0),
+        TMU::DEV::MAX31855(spi, 1),
+        TMU::DEV::MAX31855(spi, 2),
+        TMU::DEV::MAX31855(spi, 3)
+    };
+
+    TMU::TMU tmu = TMU::TMU(therms);
+    tmu.updateTemps();
 
     /**
      * Initialize CAN
@@ -163,6 +193,9 @@ int main() {
     CONmtSetMode(&canNode.Nmt, CO_OPERATIONAL);
 
     while (1) {
+        // Update the thermocouples values
+        tmu.updateTemps();
+
         CONodeProcess(&canNode);
         // Update the state of timer based events
         COTmrService(&canNode.Tmr);
