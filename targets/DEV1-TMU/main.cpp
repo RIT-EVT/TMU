@@ -125,7 +125,6 @@ int main() {
     };
 
     TMU::TMU tmu = TMU::TMU(therms);
-    tmu.updateTemps();
 
     /**
      * Initialize CAN
