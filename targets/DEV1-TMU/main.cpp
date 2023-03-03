@@ -98,8 +98,7 @@ int main() {
     DEV::Timer& timer = DEV::getTimer<DEV::MCUTimer::Timer2>(100);
 
     // Initialize SPI
-    const uint8_t deviceCount = 4;
-    IO::GPIO* devices[deviceCount];
+    IO::GPIO* devices[NUM_PINS];
 
     devices[0] = &IO::getGPIO<IO::Pin::PB_4>(EVT::core::IO::GPIO::Direction::OUTPUT);
     devices[1] = &IO::getGPIO<IO::Pin::PB_5>(EVT::core::IO::GPIO::Direction::OUTPUT);
@@ -111,11 +110,11 @@ int main() {
     devices[2]->writePin(IO::GPIO::State::HIGH);
     devices[3]->writePin(IO::GPIO::State::HIGH);
 
-    IO::SPI& spi = IO::getSPI<IO::Pin::PA_5, IO::Pin::PA_7, IO::Pin::PA_6>(devices, deviceCount);
+    IO::SPI& spi = IO::getSPI<IO::Pin::PA_5, IO::Pin::PA_7, IO::Pin::PA_6>(devices, NUM_PINS);
 
     spi.configureSPI(SPI_SPEED_1MHZ, SPI_MODE0, SPI_MSB_FIRST);
 
-    TMU::DEV::MAX31855 thermocouples[4] = {
+    TMU::DEV::MAX31855 thermocouples[NUM_PINS] = {
         TMU::DEV::MAX31855(spi, 0),
         TMU::DEV::MAX31855(spi, 1),
         TMU::DEV::MAX31855(spi, 2),

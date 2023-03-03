@@ -21,7 +21,7 @@ public:
      *
      * @param thermocouples the MAX31855 thermocouples
      */
-    explicit TMU(DEV::MAX31855 thermocouples[4]);
+    explicit TMU(DEV::MAX31855 thermocouples[NUM_PINS]);
 
     static constexpr uint8_t NODE_ID = 0x09;
 
@@ -48,12 +48,12 @@ private:
     /**
      * Stores the 4 16-bit temperature values.
      */
-    uint16_t thermTemps[4] = {};
+    uint16_t thermTemps[NUM_PINS] = {};
 
     /**
      * Stores the 4 MAX31855 thermocouples
      */
-    DEV::MAX31855 thermocouples[4];
+    DEV::MAX31855 thermocouples[NUM_PINS];
 
     /**
      * Object Dictionary Size
