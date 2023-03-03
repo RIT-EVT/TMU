@@ -3,7 +3,7 @@
 
 using namespace EVT::core::IO;
 
-namespace DEV {
+namespace TMU::DEV {
 
 MAX31855::MAX31855(SPI& spi, uint8_t device) : spi(spi), device(device) {}
 
@@ -24,4 +24,4 @@ uint16_t MAX31855::readTemp() {
     return temp;
 }
 
-}// namespace DEV
+}// namespace TMU::DEV

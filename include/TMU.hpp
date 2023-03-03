@@ -2,6 +2,12 @@
 
 #include <Canopen/co_core.h>
 #include <EVT/io/CANopen.hpp>
+#include <EVT/io/SPI.hpp>
+#include <dev/MAX31855.hpp>
+
+#define NUM_THERMOCOUPLES 4
+
+using namespace EVT::core::IO;
 
 namespace TMU {
 
@@ -10,6 +16,13 @@ namespace TMU {
  */
 class TMU {
 public:
+    /**
+     * Constructor takes an array 4 thermocouples
+     *
+     * @param thermocouples the MAX31855 thermocouples
+     */
+    explicit TMU(DEV::MAX31855 thermocouples[NUM_THERMOCOUPLES]);
+
     static constexpr uint8_t NODE_ID = 0x09;
 
     /**
@@ -26,11 +39,21 @@ public:
      */
     uint16_t getObjectDictionarySize() const;
 
+    /**
+     * Updates the thermTemps values
+     */
+    void updateTemps();
+
 private:
     /**
      * Stores the 4 16-bit temperature values.
      */
-    uint16_t thermTemps[4] = {};
+    uint16_t thermTemps[NUM_THERMOCOUPLES] = {};
+
+    /**
+     * Stores the 4 MAX31855 thermocouples
+     */
+    DEV::MAX31855 thermocouples[NUM_THERMOCOUPLES];
 
     /**
      * Object Dictionary Size

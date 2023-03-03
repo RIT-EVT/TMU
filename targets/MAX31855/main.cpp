@@ -21,7 +21,7 @@ int main() {
     IO::SPI& spi = IO::getSPI<IO::Pin::SPI_SCK, IO::Pin::SPI_MOSI, IO::Pin::SPI_MISO>(devices, deviceCount);
     spi.configureSPI(SPI_SPEED, SPI_MODE0, SPI_MSB_FIRST);
 
-    DEV::MAX31855 MAX(spi, 0);
+    TMU::DEV::MAX31855 MAX(spi, 0);
 
     uart.printf("read start:\r\n");
     while (true) {
