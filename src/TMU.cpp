@@ -2,8 +2,9 @@
 
 namespace TMU {
 
-TMU::TMU(DEV::MAX31855 t[4]) : thermocouples{
-    t[0], t[1], t[2], t[3]} {}
+TMU::TMU(DEV::MAX31855 thermocouples[NUM_PINS]) : thermocouples{
+    thermocouples[0], thermocouples[1], thermocouples[2], thermocouples[3]
+} {}
 
 CO_OBJ_T* TMU::getObjectDictionary() {
     return objectDictionary;

@@ -5,6 +5,8 @@
 #include <EVT/io/SPI.hpp>
 #include <dev/MAX31855.hpp>
 
+#define NUM_PINS 4
+
 using namespace EVT::core::IO;
 
 namespace TMU {
@@ -16,6 +18,7 @@ class TMU {
 public:
     /**
      * Constructor takes an array 4 thermocouples
+     *
      * @param thermocouples the MAX31855 thermocouples
      */
     explicit TMU(DEV::MAX31855 thermocouples[4]);

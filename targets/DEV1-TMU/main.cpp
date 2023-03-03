@@ -97,9 +97,7 @@ int main() {
     // Initialize the timer
     DEV::Timer& timer = DEV::getTimer<DEV::MCUTimer::Timer2>(100);
 
-    /**
-     * Initialize SPI
-     */
+    // Initialize SPI
     const uint8_t deviceCount = 4;
     IO::GPIO* devices[deviceCount];
 
@@ -117,13 +115,14 @@ int main() {
 
     spi.configureSPI(SPI_SPEED_1MHZ, SPI_MODE0, SPI_MSB_FIRST);
 
-    TMU::DEV::MAX31855 therms[4] = {
+    TMU::DEV::MAX31855 thermocouples[4] = {
         TMU::DEV::MAX31855(spi, 0),
         TMU::DEV::MAX31855(spi, 1),
         TMU::DEV::MAX31855(spi, 2),
-        TMU::DEV::MAX31855(spi, 3)};
+        TMU::DEV::MAX31855(spi, 3),
+    };
 
-    TMU::TMU tmu = TMU::TMU(therms);
+    TMU::TMU tmu = TMU::TMU(thermocouples);
 
     /**
      * Initialize CAN
