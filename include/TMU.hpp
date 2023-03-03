@@ -5,7 +5,7 @@
 #include <EVT/io/SPI.hpp>
 #include <dev/MAX31855.hpp>
 
-#define NUM_PINS 4
+#define NUM_THERMOCOUPLES 4
 
 using namespace EVT::core::IO;
 
@@ -21,7 +21,7 @@ public:
      *
      * @param thermocouples the MAX31855 thermocouples
      */
-    explicit TMU(DEV::MAX31855 thermocouples[NUM_PINS]);
+    explicit TMU(DEV::MAX31855 thermocouples[NUM_THERMOCOUPLES]);
 
     static constexpr uint8_t NODE_ID = 0x09;
 
@@ -48,12 +48,12 @@ private:
     /**
      * Stores the 4 16-bit temperature values.
      */
-    uint16_t thermTemps[NUM_PINS] = {};
+    uint16_t thermTemps[NUM_THERMOCOUPLES] = {};
 
     /**
      * Stores the 4 MAX31855 thermocouples
      */
-    DEV::MAX31855 thermocouples[NUM_PINS];
+    DEV::MAX31855 thermocouples[NUM_THERMOCOUPLES];
 
     /**
      * Object Dictionary Size

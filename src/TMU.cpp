@@ -2,7 +2,7 @@
 
 namespace TMU {
 
-TMU::TMU(DEV::MAX31855 thermocouples[NUM_PINS]) : thermocouples{
+TMU::TMU(DEV::MAX31855 thermocouples[NUM_THERMOCOUPLES]) : thermocouples{
     thermocouples[0], thermocouples[1], thermocouples[2], thermocouples[3]
 } {}
 
