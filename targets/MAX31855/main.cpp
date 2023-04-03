@@ -28,15 +28,29 @@ int main() {
     devices[3] = &IO::getGPIO<IO::Pin::PB_7>(EVT::core::IO::GPIO::Direction::OUTPUT);
     devices[3]->writePin(IO::GPIO::State::HIGH);
 
-    IO::SPI& spi = IO::getSPI<IO::Pin::SPI_SCK, IO::Pin::SPI_MOSI, IO::Pin::SPI_MISO>(devices, deviceCount);
+    IO::SPI& spi = IO::getSPI<IO::Pin::PA_5, IO::Pin::SPI_MOSI, IO::Pin::PA_6>(devices, deviceCount);
     spi.configureSPI(SPI_SPEED, SPI_MODE0, SPI_MSB_FIRST);
 
-    TMU::DEV::MAX31855 MAX(spi, 0);
+    TMU::DEV::MAX31855 MAX1(spi, 0);
+    TMU::DEV::MAX31855 MAX2(spi, 1);
+    TMU::DEV::MAX31855 MAX3(spi, 2);
+    TMU::DEV::MAX31855 MAX4(spi, 3);
+
 
     uart.printf("read start:\r\n");
     while (true) {
-        uint16_t temp = MAX.readTemp();
-        uart.printf("%d.%02d\r\n", temp / 100, temp % 100);
+        uint16_t temp = MAX1.readTemp();
+        uart.printf("MAX 1: %d.%02d\r\n", temp / 100, temp % 100);
+
+        temp = MAX2.readTemp();
+        uart.printf("MAX 2: %d.%02d\r\n", temp / 100, temp % 100);
+
+        temp = MAX3.readTemp();
+        uart.printf("MAX 3: %d.%02d\r\n", temp / 100, temp % 100);
+
+        temp = MAX4.readTemp();
+        uart.printf("MAX 4: %d.%02d\r\n", temp / 100, temp % 100);
+
         EVT::core::time::wait(200);
     }
 }
