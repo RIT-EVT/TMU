@@ -36,7 +36,6 @@ int main() {
     TMU::DEV::MAX31855 MAX3(spi, 2);
     TMU::DEV::MAX31855 MAX4(spi, 3);
 
-
     uart.printf("read start:\r\n");
     while (true) {
         uint16_t temp = MAX1.readTemp();
