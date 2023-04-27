@@ -35,12 +35,11 @@ int main() {
         TMU::DEV::MAX31855(spi, 0),
         TMU::DEV::MAX31855(spi, 1),
         TMU::DEV::MAX31855(spi, 2),
-        TMU::DEV::MAX31855(spi, 3)
-    };
+        TMU::DEV::MAX31855(spi, 3)};
 
     uart.printf("read start:\r\n");
     while (true) {
-        for (int i=0; i<4; i++) {
+        for (int i = 0; i < 4; i++) {
             uint16_t temp = MAXES[i].readTemp();
             uart.printf("MAX %d: %d.%02d\r\n", i, temp / 100, temp % 100);
         }
