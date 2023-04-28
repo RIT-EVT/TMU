@@ -23,7 +23,7 @@ public:
      */
     explicit TMU(DEV::MAX31855 thermocouples[NUM_THERMOCOUPLES]);
 
-    static constexpr uint8_t NODE_ID = 0x09;
+    static constexpr uint8_t NODE_ID = 7;
 
     /**
      * Gets the object dictionary
