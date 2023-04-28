@@ -7,7 +7,7 @@
 namespace IO = EVT::core::IO;
 
 constexpr uint32_t SPI_SPEED = SPI_SPEED_1MHZ;
-constexpr uint8_t deviceCount = 1;
+constexpr uint8_t deviceCount = 4;
 IO::GPIO* devices[deviceCount];
 
 int main() {
@@ -16,17 +16,34 @@ int main() {
     IO::UART& uart = IO::getUART<IO::Pin::UART_TX, IO::Pin::UART_RX>(9600);
 
     // Setup SPI
-    devices[0] = &IO::getGPIO<IO::Pin::SPI_CS>(EVT::core::IO::GPIO::Direction::OUTPUT);
+    devices[0] = &IO::getGPIO<IO::Pin::PB_4>(EVT::core::IO::GPIO::Direction::OUTPUT);
     devices[0]->writePin(IO::GPIO::State::HIGH);
-    IO::SPI& spi = IO::getSPI<IO::Pin::SPI_SCK, IO::Pin::SPI_MOSI, IO::Pin::SPI_MISO>(devices, deviceCount);
+
+    devices[1] = &IO::getGPIO<IO::Pin::PB_5>(EVT::core::IO::GPIO::Direction::OUTPUT);
+    devices[1]->writePin(IO::GPIO::State::HIGH);
+
+    devices[2] = &IO::getGPIO<IO::Pin::PB_6>(EVT::core::IO::GPIO::Direction::OUTPUT);
+    devices[2]->writePin(IO::GPIO::State::HIGH);
+
+    devices[3] = &IO::getGPIO<IO::Pin::PB_7>(EVT::core::IO::GPIO::Direction::OUTPUT);
+    devices[3]->writePin(IO::GPIO::State::HIGH);
+
+    IO::SPI& spi = IO::getSPI<IO::Pin::PA_5, IO::Pin::SPI_MOSI, IO::Pin::PA_6>(devices, deviceCount);
     spi.configureSPI(SPI_SPEED, SPI_MODE0, SPI_MSB_FIRST);
 
-    TMU::DEV::MAX31855 MAX(spi, 0);
+    TMU::DEV::MAX31855 MAXES[] = {
+        TMU::DEV::MAX31855(spi, 0),
+        TMU::DEV::MAX31855(spi, 1),
+        TMU::DEV::MAX31855(spi, 2),
+        TMU::DEV::MAX31855(spi, 3),
+    };
 
     uart.printf("read start:\r\n");
     while (true) {
-        uint16_t temp = MAX.readTemp();
-        uart.printf("%d.%02d\r\n", temp / 100, temp % 100);
+        for (int i = 0; i < 4; i++) {
+            uint16_t temp = MAXES[i].readTemp();
+            uart.printf("MAX %d: %d.%02d\r\n", i, temp / 100, temp % 100);
+        }
         EVT::core::time::wait(200);
     }
 }
