@@ -13,7 +13,7 @@ IO::GPIO* devices[deviceCount];
 int main() {
     EVT::core::platform::init();
     // Setup IO
-    IO::UART& uart = IO::getUART<IO::Pin::PA_2, IO::Pin::PA_3>(9600);
+    IO::UART& uart = IO::getUART<IO::Pin::UART_TX, IO::Pin::UART_RX>(9600);
 
     // Setup SPI
     devices[0] = &IO::getGPIO<IO::Pin::PB_4>(EVT::core::IO::GPIO::Direction::OUTPUT);
@@ -35,7 +35,8 @@ int main() {
         TMU::DEV::MAX31855(spi, 0),
         TMU::DEV::MAX31855(spi, 1),
         TMU::DEV::MAX31855(spi, 2),
-        TMU::DEV::MAX31855(spi, 3)};
+        TMU::DEV::MAX31855(spi, 3),
+    };
 
     uart.printf("read start:\r\n");
     while (true) {
