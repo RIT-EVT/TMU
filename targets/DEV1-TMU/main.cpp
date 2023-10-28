@@ -190,7 +190,7 @@ int main() {
 
     while (1) {
         // Update the thermocouples values
-        tmu.updateTemps();
+        tmu.process();
 
         CONodeProcess(&canNode);
         // Update the state of timer based events
