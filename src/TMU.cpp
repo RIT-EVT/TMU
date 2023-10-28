@@ -13,9 +13,17 @@ uint16_t TMU::getObjectDictionarySize() const {
     return OBJECT_DICTIONARY_SIZE;
 }
 
-void TMU::updateTemps() {
+void TMU::process() {
+    uint16_t temp_array[4] = {0};
+    DEV::MAX31855::MaxStatus err_arr[4];
+
     for (int i = 0; i < 4; i++) {
-        thermTemps[i] = thermocouples[i].readTemp();
+        err_arr[i] = thermocouples[i].readTemp(temp_array[i]);
+
+        //Set the temp to int max if there was an error
+        if (err_arr[i] != DEV::MAX31855::MaxStatus::NO_ERROR) {
+            temp_array[i] = -1;
+        }
     }
 }
 

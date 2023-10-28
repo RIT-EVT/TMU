@@ -3,6 +3,7 @@
 
 #include <EVT/io/SPI.hpp>
 #include <cstdint>
+#include <utility>
 
 using namespace EVT::core::IO;
 
@@ -23,17 +24,38 @@ public:
     explicit MAX31855(SPI& spi, uint8_t device);
 
     /**
-     * Returns the temp in centicelsius
+     * The status of the MAX31855 after starting a temperature read.
      *
-     * @return The temp
+     * NO_ERROR: No error
+     * SCV_FAULT: Short to VCC
+     * SCG_FAULT: Short to GND
+     * OC_FAULT: Open Circuit
+     * MAX31855_ERROR: Error reading from the MAX31855
      */
-    uint16_t readTemp();
+    enum class MaxStatus {
+        NO_ERROR = 0,
+        SCV_FAULT = 1,
+        SCG_FAULT = 2,
+        OC_FAULT = 3,
+        MAX31855_ERROR = 4
+    };
+
+    /**
+     * Reads the temperature from the MAX31855 and updates the temp variable passed in.
+     *
+     * @param[in] temp The temperature to update using the readTemp method.
+     *
+     * @return a MaxStatus enum indicating the status of the read.
+     */
+     MAX31855::MaxStatus readTemp(uint16_t& temp);
+
 
 private:
     /** The SPI interface to read from */
     SPI& spi;
     /** The SPI device number for this device */
     uint8_t device;
+
 };
 
 }// namespace TMU::DEV
