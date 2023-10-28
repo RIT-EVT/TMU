@@ -38,7 +38,7 @@ int main() {
         TMU::DEV::MAX31855(spi, 3),
     };
 
-    uart.printf("read start:\r\n"); // Print a message to the UART
+    uart.printf("read start:\r\n");// Print a message to the UART
     while (true) {
         for (int i = 0; i < 4; i++) {
             uint16_t temp = 0;
@@ -53,4 +53,3 @@ int main() {
         EVT::core::time::wait(200);
     }
 }
-

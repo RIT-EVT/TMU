@@ -47,15 +47,13 @@ public:
      *
      * @return a MaxStatus enum indicating the status of the read.
      */
-     MAX31855::MaxStatus readTemp(uint16_t& temp);
-
+    MAX31855::MaxStatus readTemp(uint16_t& temp);
 
 private:
     /** The SPI interface to read from */
     SPI& spi;
     /** The SPI device number for this device */
     uint8_t device;
-
 };
 
 }// namespace TMU::DEV
