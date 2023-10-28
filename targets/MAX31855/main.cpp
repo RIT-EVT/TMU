@@ -46,6 +46,7 @@ int main() {
             if (result == TMU::DEV::MAX31855::MaxStatus::NO_ERROR) {
                 uart.printf("MAX %d: %d.%02d\r\n", i, temp / 100, temp % 100);
             } else {
+                //print Enum value for readTemp error.
                 uart.printf("MAX %d: Error! %x \r\n", i, result);
             }
         }

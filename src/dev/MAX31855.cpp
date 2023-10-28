@@ -31,7 +31,7 @@ MAX31855::MaxStatus MAX31855::readTemp(uint16_t& temp) {
      * 0x02 is the flag for SCG Fault (Short to GND)
      * 0x04 is the flag for SCV Fault (Short to VCC)
 
-     Check error raised bit, if last bit is bitwise equals to 1, then there is an error
+     Check the error checking bit, if bit equals 1, then there is an error
      */
     if (lastDataBit & 0x01){
         uint8_t lastByte = 0;

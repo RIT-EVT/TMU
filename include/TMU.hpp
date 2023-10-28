@@ -152,6 +152,7 @@ private:
             .Type = CO_TEVENT,
             .Data = (uintptr_t) 500,
         },
+
         /*
          * TPDO 0 Mapping
          * 0. The number of mapping objects in the first TPDO

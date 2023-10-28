@@ -20,7 +20,7 @@ void TMU::process() {
     for (int i = 0; i < 4; i++) {
         err_arr[i] = thermocouples[i].readTemp(temp_array[i]);
 
-        //Set the temp to int max if there was an error
+        //Set the temp to int max if there was an error reading from the MAX31855
         if (err_arr[i] != DEV::MAX31855::MaxStatus::NO_ERROR) {
             temp_array[i] = -1;
         }

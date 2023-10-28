@@ -23,7 +23,7 @@ public:
      */
     explicit MAX31855(SPI& spi, uint8_t device);
 
-    /**
+    /*
      * The status of the MAX31855 after starting a temperature read.
      *
      * NO_ERROR: No error
