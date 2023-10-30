@@ -32,8 +32,8 @@ public:
      * OC_FAULT: Open Circuit
      * MAX31855_ERROR: Error reading from the MAX31855
      */
-    enum class MaxStatus {
-        NO_ERROR = 0,
+    enum MaxStatus {
+        OK = 0,
         SCV_FAULT = 1,
         SCG_FAULT = 2,
         OC_FAULT = 3,
@@ -44,8 +44,7 @@ public:
      * Reads the temperature from the MAX31855 and updates the temp variable passed in.
      *
      * @param[in] temp The temperature to update using the readTemp method.
-     *
-     * @return a MaxStatus enum indicating the status of the read.
+     * @param[out] temp The temperature reported by the IC
      */
      MAX31855::MaxStatus readTemp(uint16_t& temp);
 

@@ -43,7 +43,7 @@ int main() {
         for (int i = 0; i < 4; i++) {
             uint16_t temp = 0;
             auto result = MAXES[i].readTemp(temp);
-            if (result == TMU::DEV::MAX31855::MaxStatus::NO_ERROR) {
+            if (result == TMU::DEV::MAX31855::MaxStatus::OK) {
                 uart.printf("MAX %d: %d.%02d\r\n", i, temp / 100, temp % 100);
             } else {
                 //print Enum value for readTemp error.

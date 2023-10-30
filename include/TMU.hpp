@@ -41,7 +41,6 @@ public:
 
     /**
      * Updates the temperature values in an array and updates the error array from the TMU object.
-     *
      */
     void process();
 
@@ -55,6 +54,11 @@ private:
      * Stores the 4 MAX31855 thermocouples
      */
     DEV::MAX31855 thermocouples[NUM_THERMOCOUPLES];
+
+    /*
+     * Stores the 4 MAX31855 error statuses
+     */
+    DEV::MAX31855::MaxStatus err_arr[NUM_THERMOCOUPLES];
 
     /**
      * Object Dictionary Size
@@ -281,6 +285,30 @@ private:
             .Key = CO_KEY(0x2100, 3, CO_UNSIGNED16 | CO_OBJ___PRW),
             .Type = nullptr,
             .Data = (uintptr_t) &thermTemps[3],
+        },
+
+        /*
+         * Error Data Links
+         */
+        {
+            .Key = CO_KEY(0x2101, 0, CO_UNSIGNED8 | CO_OBJ___PRW),
+            .Type = nullptr,
+            .Data = (uintptr_t) &err_arr[0],
+        },
+        {
+            .Key = CO_KEY(0x2101, 1, CO_UNSIGNED8 | CO_OBJ___PRW),
+            .Type = nullptr,
+            .Data = (uintptr_t) &err_arr[1],
+        },
+        {
+            .Key = CO_KEY(0x2101, 2, CO_UNSIGNED8 | CO_OBJ___PRW),
+            .Type = nullptr,
+            .Data = (uintptr_t) &err_arr[2],
+        },
+        {
+            .Key = CO_KEY(0x2101, 3, CO_UNSIGNED8 | CO_OBJ___PRW),
+            .Type = nullptr,
+            .Data = (uintptr_t) &err_arr[3],
         },
         CO_OBJ_DIR_ENDMARK,
     };

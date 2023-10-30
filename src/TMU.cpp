@@ -14,15 +14,14 @@ uint16_t TMU::getObjectDictionarySize() const {
 }
 
 void TMU::process() {
-    uint16_t temp_array[4] = {0};
-    DEV::MAX31855::MaxStatus err_arr[4];
+    uint16_t thermTemps[NUM_THERMOCOUPLES] = {};
 
     for (int i = 0; i < 4; i++) {
-        err_arr[i] = thermocouples[i].readTemp(temp_array[i]);
+        err_arr[i] = thermocouples[i].readTemp(thermTemps[i]);
 
         //Set the temp to int max if there was an error reading from the MAX31855
-        if (err_arr[i] != DEV::MAX31855::MaxStatus::NO_ERROR) {
-            temp_array[i] = -1;
+        if (err_arr[i] != DEV::MAX31855::MaxStatus::OK) {
+            thermTemps[i] = -1;
         }
     }
 }
