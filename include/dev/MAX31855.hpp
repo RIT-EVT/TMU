@@ -30,14 +30,15 @@ public:
      * SCV_FAULT: Short to VCC
      * SCG_FAULT: Short to GND
      * OC_FAULT: Open Circuit
-     * MAX31855_ERROR: Error reading from the MAX31855
+     * READ_ERROR: Error reading from the MAX31855
      */
     enum MaxStatus {
         OK = 0,
         SCV_FAULT = 1,
         SCG_FAULT = 2,
         OC_FAULT = 3,
-        MAX31855_ERROR = 4
+        READ_ERROR = 4,
+        SPI_ERROR = 5
     };
 
     /**

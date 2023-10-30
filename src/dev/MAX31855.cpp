@@ -12,12 +12,12 @@ MAX31855::MaxStatus MAX31855::readTemp(uint16_t& temp) {
     uint16_t returned_data = 0;
 
     const uint8_t length = 4;
-    uint8_t bytes[length] = {'\0'};
+    uint8_t bytes[length];
 
     spi.startTransmission(device);
     SPI::SPIStatus status = spi.read(bytes, length);
     if(status != SPI::SPIStatus::OK) {
-        return MaxStatus::MAX31855_ERROR;
+        return MaxStatus::SPI_ERROR;
     }
     spi.endTransmission(device);
 
@@ -54,7 +54,7 @@ MAX31855::MaxStatus MAX31855::readTemp(uint16_t& temp) {
         }
 
         // If the byte does not match any flags, then there is an error reading from the MAX31855
-        return MaxStatus::MAX31855_ERROR;
+        return MaxStatus::READ_ERROR;
     }
 
     returned_data = returned_data >> 2; // Make temp equal to the 14-byte read temp value

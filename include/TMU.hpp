@@ -63,7 +63,7 @@ private:
     /**
      * Object Dictionary Size
      */
-    static constexpr uint16_t OBJECT_DICTIONARY_SIZE = 31;
+    static constexpr uint16_t OBJECT_DICTIONARY_SIZE = 41;
 
     /**
      * CAN Open object dictionary
@@ -152,7 +152,7 @@ private:
         },
         {
             //send every 2 seconds
-            .Key = CO_KEY(0x1800, 5, CO_UNSIGNED16 | CO_OBJ_D__R_),
+            .Key = CO_KEY(0x1800, 4, CO_UNSIGNED16 | CO_OBJ_D__R_),
             .Type = CO_TEVENT,
             .Data = (uintptr_t) 500,
         },
@@ -224,7 +224,7 @@ private:
         },
         {
             //send every 2 seconds
-            .Key = CO_KEY(0x1801, 5, CO_UNSIGNED16 | CO_OBJ_D__R_),
+            .Key = CO_KEY(0x1801, 4, CO_UNSIGNED16 | CO_OBJ_D__R_),
             .Type = CO_TEVENT,
             .Data = (uintptr_t) 500,
         },
