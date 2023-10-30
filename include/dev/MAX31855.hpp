@@ -31,6 +31,7 @@ public:
      * SCG_FAULT: Short to GND
      * OC_FAULT: Open Circuit
      * READ_ERROR: Error reading from the MAX31855
+     * SPI_ERROR: Error starting SPI Read
      */
     enum MaxStatus {
         OK = 0,
