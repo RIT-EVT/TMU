@@ -5,7 +5,6 @@ using namespace EVT::core::IO;
 
 namespace TMU::DEV {
 
-
 MAX31855::MAX31855(SPI& spi, uint8_t device) : spi(spi), device(device) {}
 
 MAX31855::MaxStatus MAX31855::readTemp(uint16_t& temp) {
@@ -16,16 +15,15 @@ MAX31855::MaxStatus MAX31855::readTemp(uint16_t& temp) {
 
     spi.startTransmission(device);
     SPI::SPIStatus status = spi.read(bytes, length);
-    if(status != SPI::SPIStatus::OK) {
+    if (status != SPI::SPIStatus::OK) {
         return MaxStatus::SPI_ERROR;
     }
     spi.endTransmission(device);
 
-    returned_data = (((uint16_t)bytes[0]) << 8) | bytes[1];
+    returned_data = (((uint16_t) bytes[0]) << 8) | bytes[1];
 
     uint8_t lastDataBit = 0;
-    lastDataBit = bytes[1] & 0x01; // Get the last bit of the 2nd byte
-
+    lastDataBit = bytes[1] & 0x01;// Get the last bit of the 2nd byte
 
     /*
      * 0x01 is the flag for OC Fault (Open Circuit)
@@ -34,9 +32,9 @@ MAX31855::MaxStatus MAX31855::readTemp(uint16_t& temp) {
 
      Check the error checking bit, if bit equals 1, then there is an error
      */
-    if (lastDataBit & 0x01){
+    if (lastDataBit & 0x01) {
         uint8_t lastByte = 0;
-        lastByte = bytes[3] & 0x01; // Get the last bit of the 4th byte
+        lastByte = bytes[3] & 0x01;// Get the last bit of the 4th byte
 
         // Check for OC Fault
         if (lastByte & 0x01) {
@@ -57,14 +55,13 @@ MAX31855::MaxStatus MAX31855::readTemp(uint16_t& temp) {
         return MaxStatus::READ_ERROR;
     }
 
-    returned_data = returned_data >> 2; // Make temp equal to the 14-byte read temp value
+    returned_data = returned_data >> 2;// Make temp equal to the 14-byte read temp value
 
-    returned_data = (returned_data >> 2) * 100 + (returned_data & 0x03) * 25; // Convert the last 2 digits to allow for a decimal place
+    returned_data = (returned_data >> 2) * 100 + (returned_data & 0x03) * 25;// Convert the last 2 digits to allow for a decimal place
 
     temp = returned_data;
 
     return MaxStatus::OK;
 }
 
-} // namespace TMU::DEV
-
+}// namespace TMU::DEV
