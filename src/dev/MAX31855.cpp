@@ -20,7 +20,6 @@ MAX31855::MaxStatus MAX31855::readTemp(uint16_t& temp) {
     }
     spi.endTransmission(device);
 
-
     uint8_t lastDataBit = 0;
     lastDataBit = bytes[1] & 0x01;// Get the last bit of the 2nd byte
 
