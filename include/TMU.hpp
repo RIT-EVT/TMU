@@ -152,7 +152,7 @@ private:
         },
         {
             //send every 2 seconds
-            .Key = CO_KEY(0x1800, 4, CO_UNSIGNED16 | CO_OBJ_D__R_),
+            .Key = CO_KEY(0x1800, 5, CO_UNSIGNED16 | CO_OBJ_D__R_),
             .Type = CO_TEVENT,
             .Data = (uintptr_t) 500,
         },
@@ -208,7 +208,7 @@ private:
             //180h+Node-ID
             .Key = CO_KEY(0x1801, 1, CO_UNSIGNED32 | CO_OBJ_D__R_),
             .Type = nullptr,
-            .Data = (uintptr_t) CO_COBID_TPDO_DEFAULT(0) + NODE_ID,
+            .Data = (uintptr_t) CO_COBID_TPDO_DEFAULT(1) + NODE_ID,
         },
         {
             //timer triggered
@@ -224,7 +224,7 @@ private:
         },
         {
             //send every 2 seconds
-            .Key = CO_KEY(0x1801, 4, CO_UNSIGNED16 | CO_OBJ_D__R_),
+            .Key = CO_KEY(0x1801, 5, CO_UNSIGNED16 | CO_OBJ_D__R_),
             .Type = CO_TEVENT,
             .Data = (uintptr_t) 500,
         },

@@ -8,7 +8,7 @@ namespace TMU::DEV {
 MAX31855::MAX31855(SPI& spi, uint8_t device) : spi(spi), device(device) {}
 
 MAX31855::MaxStatus MAX31855::readTemp(uint16_t& temp) {
-    uint16_t returned_data = 0;
+    uint16_t returnedData = 0;
 
     const uint8_t length = 4;
     uint8_t bytes[length];
@@ -20,7 +20,6 @@ MAX31855::MaxStatus MAX31855::readTemp(uint16_t& temp) {
     }
     spi.endTransmission(device);
 
-    returned_data = (((uint16_t) bytes[0]) << 8) | bytes[1];
 
     uint8_t lastDataBit = 0;
     lastDataBit = bytes[1] & 0x01;// Get the last bit of the 2nd byte
@@ -54,12 +53,13 @@ MAX31855::MaxStatus MAX31855::readTemp(uint16_t& temp) {
         // If the byte does not match any flags, then there is an error reading from the MAX31855
         return MaxStatus::READ_ERROR;
     }
+    returnedData = (((uint16_t) bytes[0]) << 8) | bytes[1];
 
-    returned_data = returned_data >> 2;// Make temp equal to the 14-byte read temp value
+    returnedData = returnedData >> 2;// Make temp equal to the 14-byte read temp value
 
-    returned_data = (returned_data >> 2) * 100 + (returned_data & 0x03) * 25;// Convert the last 2 digits to allow for a decimal place
+    returnedData = (returnedData >> 2) * 100 + (returnedData & 0x03) * 25;// Convert the last 2 digits to allow for a decimal place
 
-    temp = returned_data;
+    temp = returnedData;
 
     return MaxStatus::OK;
 }
