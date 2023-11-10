@@ -40,10 +40,9 @@ public:
 
 
     /**
-     * Reads the temperature from the MAX31855 and updates the temp variable passed in.
+     * Reads the temperature from the MAX31855 and updates the temp variable passed in.R
      * Returns a MaxStatus to indicate if there was any errors.
      *
-     * @param[in] temp The temperature to update using the readTemp method.
      * @param[out] temp The temperature reported by the IC.
      */
     MAX31855::MaxStatus readTemp(uint16_t& temp);
