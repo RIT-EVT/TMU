@@ -229,8 +229,6 @@ private:
             .Data = CO_LINK(0x2100, 3, 16),
         },
 
-
-
         /*
          * TPDO 1 Mapping
          * 0. The number of mapping objects in the second TPDO

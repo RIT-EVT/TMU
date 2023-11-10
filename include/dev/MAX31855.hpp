@@ -30,14 +30,13 @@ public:
      * the MAX31855 temperature sensor operations.
      */
     enum MaxStatus {
-            OK = 0,         ///< No error
-            SCV_FAULT = 1,  ///< Short to VCC
-            SCG_FAULT = 2,  ///< Short to GND
-            OC_FAULT = 3,   ///< Open Circuit
-            READ_ERROR = 4, ///< Error reading from the MAX31855
-            SPI_ERROR = 5   ///< Error starting SPI Read
+        OK = 0,        ///< No error
+        SCV_FAULT = 1, ///< Short to VCC
+        SCG_FAULT = 2, ///< Short to GND
+        OC_FAULT = 3,  ///< Open Circuit
+        READ_ERROR = 4,///< Error reading from the MAX31855
+        SPI_ERROR = 5  ///< Error starting SPI Read
     };
-
 
     /**
      * Reads the temperature from the MAX31855 and updates the temp variable passed in.R
