@@ -245,22 +245,22 @@ private:
         {
             .Key = CO_KEY(0x1A00, 6, CO_UNSIGNED32 | CO_OBJ_D__R_),
             .Type = nullptr,
-            .Data = CO_LINK(0x2101, 0, 8),
+            .Data = CO_LINK(0x2100, 0, 8),
         },
         {
             .Key = CO_KEY(0x1A00, 7, CO_UNSIGNED32 | CO_OBJ_D__R_),
             .Type = nullptr,
-            .Data = CO_LINK(0x2101, 1, 8),
+            .Data = CO_LINK(0x2100, 1, 8),
         },
         {
             .Key = CO_KEY(0x1A00, 8, CO_UNSIGNED32 | CO_OBJ_D__R_),
             .Type = nullptr,
-            .Data = CO_LINK(0x2101, 2, 8),
+            .Data = CO_LINK(0x2100, 2, 8),
         },
         {
             .Key = CO_KEY(0x1A00, 9, CO_UNSIGNED32 | CO_OBJ_D__R_),
             .Type = nullptr,
-            .Data = CO_LINK(0x2101, 3, 8),
+            .Data = CO_LINK(0x2100, 3, 8),
         },
 
         /*
