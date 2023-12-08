@@ -238,29 +238,29 @@ private:
          * 4. Link to the fourth error - err_arr[3]
          */
         {
-            .Key = CO_KEY(0x1A00, 5, CO_UNSIGNED8 | CO_OBJ_D__R_),
+            .Key = CO_KEY(0x1A01, 0, CO_UNSIGNED8 | CO_OBJ_D__R_),
             .Type = nullptr,
             .Data = (uintptr_t) 4,
         },
         {
-            .Key = CO_KEY(0x1A00, 6, CO_UNSIGNED32 | CO_OBJ_D__R_),
+            .Key = CO_KEY(0x1A01, 1, CO_UNSIGNED32 | CO_OBJ_D__R_),
             .Type = nullptr,
-            .Data = CO_LINK(0x2100, 0, 8),
+            .Data = CO_LINK(0x2101, 0, 8),
         },
         {
-            .Key = CO_KEY(0x1A00, 7, CO_UNSIGNED32 | CO_OBJ_D__R_),
+            .Key = CO_KEY(0x1A01, 2, CO_UNSIGNED32 | CO_OBJ_D__R_),
             .Type = nullptr,
-            .Data = CO_LINK(0x2100, 1, 8),
+            .Data = CO_LINK(0x2101, 1, 8),
         },
         {
-            .Key = CO_KEY(0x1A00, 8, CO_UNSIGNED32 | CO_OBJ_D__R_),
+            .Key = CO_KEY(0x1A01, 3, CO_UNSIGNED32 | CO_OBJ_D__R_),
             .Type = nullptr,
-            .Data = CO_LINK(0x2100, 2, 8),
+            .Data = CO_LINK(0x2101, 2, 8),
         },
         {
-            .Key = CO_KEY(0x1A00, 9, CO_UNSIGNED32 | CO_OBJ_D__R_),
+            .Key = CO_KEY(0x1A01, 4, CO_UNSIGNED32 | CO_OBJ_D__R_),
             .Type = nullptr,
-            .Data = CO_LINK(0x2100, 3, 8),
+            .Data = CO_LINK(0x2101, 3, 8),
         },
 
         /*
@@ -291,22 +291,22 @@ private:
          * Error Data Links
          */
         {
-            .Key = CO_KEY(0x2100, 4, CO_UNSIGNED8 | CO_OBJ___PRW),
+            .Key = CO_KEY(0x2101, 0, CO_UNSIGNED8 | CO_OBJ___PRW),
             .Type = nullptr,
             .Data = (uintptr_t) &err_arr[0],
         },
         {
-            .Key = CO_KEY(0x2100, 5, CO_UNSIGNED8 | CO_OBJ___PRW),
+            .Key = CO_KEY(0x2101, 1, CO_UNSIGNED8 | CO_OBJ___PRW),
             .Type = nullptr,
             .Data = (uintptr_t) &err_arr[1],
         },
         {
-            .Key = CO_KEY(0x2100, 6, CO_UNSIGNED8 | CO_OBJ___PRW),
+            .Key = CO_KEY(0x2101, 2, CO_UNSIGNED8 | CO_OBJ___PRW),
             .Type = nullptr,
             .Data = (uintptr_t) &err_arr[2],
         },
         {
-            .Key = CO_KEY(0x2100, 7, CO_UNSIGNED8 | CO_OBJ___PRW),
+            .Key = CO_KEY(0x2101, 3, CO_UNSIGNED8 | CO_OBJ___PRW),
             .Type = nullptr,
             .Data = (uintptr_t) &err_arr[3],
         },
