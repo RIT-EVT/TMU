@@ -23,11 +23,28 @@ public:
     explicit MAX31855(SPI& spi, uint8_t device);
 
     /**
-     * Returns the temp in centicelsius
+     * @enum MaxStatus
+     * @brief Status codes for MAX31855 temperature sensor operations.
      *
-     * @return The temp
+     * This enum represents the possible status codes that can be returned by
+     * the MAX31855 temperature sensor operations.
      */
-    uint16_t readTemp();
+    enum MaxStatus {
+        OK = 0,        ///< No error
+        SCV_FAULT = 1, ///< Short to VCC
+        SCG_FAULT = 2, ///< Short to GND
+        OC_FAULT = 3,  ///< Open Circuit
+        READ_ERROR = 4,///< Error reading from the MAX31855
+        SPI_ERROR = 5  ///< Error starting SPI Read
+    };
+
+    /**
+     * Reads the temperature from the MAX31855 and updates the temp variable passed in.R
+     * Returns a MaxStatus to indicate if there was any errors.
+     *
+     * @param[out] temp The temperature reported by the IC.
+     */
+    MAX31855::MaxStatus readTemp(uint16_t& temp);
 
 private:
     /** The SPI interface to read from */

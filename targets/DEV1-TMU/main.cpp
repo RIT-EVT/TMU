@@ -188,9 +188,11 @@ int main() {
     CONodeStart(&canNode);
     CONmtSetMode(&canNode.Nmt, CO_OPERATIONAL);
 
+    log::LOGGER.log(log::Logger::LogLevel::DEBUG, "Error code: %d\r\n", canNode.Error);
+
     while (1) {
         // Update the thermocouples values
-        tmu.updateTemps();
+        tmu.process();
 
         CONodeProcess(&canNode);
         // Update the state of timer based events

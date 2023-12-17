@@ -12,7 +12,7 @@ using namespace EVT::core::IO;
 namespace TMU {
 
 /**
- * This is an example of a class for a board
+ * Handles thermo-couple data from the MAX31855 ADC and sends it over CANopen
  */
 class TMU {
 public:
@@ -40,9 +40,9 @@ public:
     uint16_t getObjectDictionarySize() const;
 
     /**
-     * Updates the thermTemps values
+     * Updates the temperature values in an array and updates the error array from the TMU object.
      */
-    void updateTemps();
+    void process();
 
 private:
     /**
@@ -55,10 +55,15 @@ private:
      */
     DEV::MAX31855 thermocouples[NUM_THERMOCOUPLES];
 
+    /*
+     * Stores the 4 MAX31855 error statuses
+     */
+    DEV::MAX31855::MaxStatus err_arr[NUM_THERMOCOUPLES];
+
     /**
      * Object Dictionary Size
      */
-    static constexpr uint16_t OBJECT_DICTIONARY_SIZE = 21;
+    static constexpr uint16_t OBJECT_DICTIONARY_SIZE = 41;
 
     /**
      * CAN Open object dictionary
@@ -98,7 +103,7 @@ private:
             .Data = (uintptr_t) 0x13,
         },
 
-        /**
+        /*
          * SDO CAN message IDS.
          * 1: Client -> Server ID, default is 0x600 + NODE_ID
          * 2: Server -> Client ID, default is 0x580 + NODE_ID
@@ -114,9 +119,9 @@ private:
             .Data = (uintptr_t) 0x580 + NODE_ID,
         },
 
-        /**
-         * TPDO 1 Settings
-         * 0. The number of sub indxes.
+        /*
+         * TPDO 0 Settings
+         * 0. The number of sub indices.
          * 1. The COBID for the transmitting node
          * 2. The transmission trigger 0xFE is asynchronous
          * 3. The inhibit time
@@ -151,8 +156,47 @@ private:
             .Type = CO_TEVENT,
             .Data = (uintptr_t) 500,
         },
-        /**
-         * TPDO 1 Mapping
+
+        /*
+         * TPDO 1 Settings
+         * 0. The number of sub indices.
+         * 1. The COBID for the transmitting node
+         * 2. The transmission trigger 0xFE is asynchronous
+         * 3. The inhibit time
+         * 4. The event timer
+         */
+        {
+            .Key = CO_KEY(0x1801, 0, CO_UNSIGNED8 | CO_OBJ_D__R_),
+            .Type = nullptr,
+            .Data = (uintptr_t) 5,
+        },
+        {
+            //180h+Node-ID
+            .Key = CO_KEY(0x1801, 1, CO_UNSIGNED32 | CO_OBJ_D__R_),
+            .Type = nullptr,
+            .Data = (uintptr_t) CO_COBID_TPDO_DEFAULT(1) + NODE_ID,
+        },
+        {
+            //timer triggered
+            .Key = CO_KEY(0x1801, 2, CO_UNSIGNED8 | CO_OBJ_D__R_),
+            .Type = nullptr,
+            .Data = (uintptr_t) 0xFE,
+        },
+        {
+            //no inhibit time
+            .Key = CO_KEY(0x1801, 3, CO_UNSIGNED16 | CO_OBJ_D__R_),
+            .Type = nullptr,
+            .Data = (uintptr_t) 0,
+        },
+        {
+            //send every 2 seconds
+            .Key = CO_KEY(0x1801, 5, CO_UNSIGNED16 | CO_OBJ_D__R_),
+            .Type = CO_TEVENT,
+            .Data = (uintptr_t) 500,
+        },
+
+        /*
+         * TPDO 0 Mapping
          * 0. The number of mapping objects in the first TPDO
          * 1. Link to the first temperature - thermTemps[0]
          * 2. Link to the second temperature - thermTemps[1]
@@ -185,7 +229,41 @@ private:
             .Data = CO_LINK(0x2100, 3, 16),
         },
 
-        /**
+        /*
+         * TPDO 1 Mapping
+         * 0. The number of mapping objects in the second TPDO
+         * 1. Link to the first error - err_arr[0]
+         * 2. Link to the second error - err_arr[1]
+         * 3. Link to the third error - err_arr[2]
+         * 4. Link to the fourth error - err_arr[3]
+         */
+        {
+            .Key = CO_KEY(0x1A01, 0, CO_UNSIGNED8 | CO_OBJ_D__R_),
+            .Type = nullptr,
+            .Data = (uintptr_t) 4,
+        },
+        {
+            .Key = CO_KEY(0x1A01, 1, CO_UNSIGNED32 | CO_OBJ_D__R_),
+            .Type = nullptr,
+            .Data = CO_LINK(0x2101, 0, 8),
+        },
+        {
+            .Key = CO_KEY(0x1A01, 2, CO_UNSIGNED32 | CO_OBJ_D__R_),
+            .Type = nullptr,
+            .Data = CO_LINK(0x2101, 1, 8),
+        },
+        {
+            .Key = CO_KEY(0x1A01, 3, CO_UNSIGNED32 | CO_OBJ_D__R_),
+            .Type = nullptr,
+            .Data = CO_LINK(0x2101, 2, 8),
+        },
+        {
+            .Key = CO_KEY(0x1A01, 4, CO_UNSIGNED32 | CO_OBJ_D__R_),
+            .Type = nullptr,
+            .Data = CO_LINK(0x2101, 3, 8),
+        },
+
+        /*
          * Data Links
          */
         {
@@ -207,6 +285,30 @@ private:
             .Key = CO_KEY(0x2100, 3, CO_UNSIGNED16 | CO_OBJ___PRW),
             .Type = nullptr,
             .Data = (uintptr_t) &thermTemps[3],
+        },
+
+        /*
+         * Error Data Links
+         */
+        {
+            .Key = CO_KEY(0x2101, 0, CO_UNSIGNED8 | CO_OBJ___PRW),
+            .Type = nullptr,
+            .Data = (uintptr_t) &err_arr[0],
+        },
+        {
+            .Key = CO_KEY(0x2101, 1, CO_UNSIGNED8 | CO_OBJ___PRW),
+            .Type = nullptr,
+            .Data = (uintptr_t) &err_arr[1],
+        },
+        {
+            .Key = CO_KEY(0x2101, 2, CO_UNSIGNED8 | CO_OBJ___PRW),
+            .Type = nullptr,
+            .Data = (uintptr_t) &err_arr[2],
+        },
+        {
+            .Key = CO_KEY(0x2101, 3, CO_UNSIGNED8 | CO_OBJ___PRW),
+            .Type = nullptr,
+            .Data = (uintptr_t) &err_arr[3],
         },
         CO_OBJ_DIR_ENDMARK,
     };
