@@ -76,15 +76,7 @@ extern "C" void CONmtHbConsChange(CO_NMT* nmt, uint8_t nodeId, CO_MODE mode) {}
 
 extern "C" int16_t COParaDefault(CO_PARA* pg) { return 0; }
 
-extern "C" void COPdoTransmit(CO_IF_FRM* frm) {
-    log::LOGGER.log(log::Logger::LogLevel::DEBUG, "Sending PDO as 0x%X with length %d and data: ", frm->Identifier, frm->DLC);
-    uint8_t* data = frm->Data;
-    for (int i = 0; i < frm->DLC; i++) {
-        log::LOGGER.log(log::Logger::LogLevel::DEBUG, "%X ", *data);
-        data++;
-    }
-    log::LOGGER.log(log::Logger::LogLevel::DEBUG, "\r\n");
-}
+extern "C" void COPdoTransmit(CO_IF_FRM* frm) {}
 
 extern "C" int16_t COPdoReceive(CO_IF_FRM* frm) { return 0; }
 
