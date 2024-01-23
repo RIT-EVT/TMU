@@ -43,7 +43,6 @@ int main() {
         TMU::DEV::MAX31855(spi, 3),
     };
 
-
     while (true) {
         //print temps and error array for csv friendly format
         //temp1: ,temp2: ,temp3: ,temp4:, error1: ,error2: ,error3: ,error4:
