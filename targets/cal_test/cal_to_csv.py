@@ -6,33 +6,44 @@ import time
 com_port = input('Enter the COM port (Format: COMXX): ')
 ser = serial.Serial(com_port, 9600)  # Replace the COM port with the one you're using
 
-# Open a CSV file for writing
-csv_file_path = 'sensor_data.csv'
-with open(csv_file_path, 'w', newline='') as csv_file:
-    csv_writer = csv.writer(csv_file)
+try:
+    while True:
+        # Generate a new file name with timestamp
+        csv_file_path = f'sensor_data.csv'
 
-    # Write the header to the CSV file
-    csv_writer.writerow(['Temp1', 'Temp2', 'Temp3', 'Temp4', 'Error1', 'Error2', 'Error3', 'Error4'])
+        # Open a new CSV file for writing
+        with open(csv_file_path, 'w', newline='') as csv_file:
+            csv_writer = csv.writer(csv_file)
 
-    try:
-        while True:
-            # Read a line from the serial port
-            line = ser.readline().decode('utf-8').strip()
+            # Write the header to the CSV file
+            csv_writer.writerow(['Temp1', 'Temp2', 'Temp3', 'Temp4', 'Error1', 'Error2', 'Error3', 'Error4'])
 
-            # Split the line into individual values
-            values = line.split(',')
-            temps = [int(value.split(':')[1]) for value in values[:4]]
-            errors = [int(value.split(':')[1]) for value in values[4:]]
+            try:
+                while True:
+                    # Read a line from the serial port
+                    line = ser.readline().decode('utf-8').strip()
 
-            # Write the values to the CSV file
-            csv_writer.writerow(temps + errors)
+                    # Split the line into individual values
+                    values = line.split(',')
+                    temps = [int(value.split(':')[1]) for value in values[:4]]
+                    errors = [int(value.split(':')[1]) for value in values[4:]]
 
-            # Flush the buffer to update the file in real-time
-            csv_file.flush()
+                    # Write the values to the CSV file
+                    csv_writer.writerow(temps + errors)
 
-            # Wait 1 second before reading the next line
-            time.sleep(1)
+                    # Flush the buffer to update the file in real-time
+                    csv_file.flush()
 
-    except KeyboardInterrupt:
-        # Close the serial port when the script is interrupted
-        ser.close()
+                    # Wait 1 second before reading the next line
+                    time.sleep(1)
+
+            except KeyboardInterrupt:
+                # Close the serial port when the script is interrupted
+                ser.close()
+
+except Exception as e:
+    print(f"An error occurred: {e}")
+
+finally:
+    # Close the serial port when the script is finished
+    ser.close()
