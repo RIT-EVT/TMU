@@ -3,7 +3,8 @@ import csv
 import time
 
 # Open the serial port
-ser = serial.Serial('COM10', 9600)  # Replace the COM port with the one you're using
+com_port = input('Enter the COM port (Format: COMXX): ')
+ser = serial.Serial(com_port, 9600)  # Replace the COM port with the one you're using
 
 # Open a CSV file for writing
 csv_file_path = 'sensor_data.csv'
