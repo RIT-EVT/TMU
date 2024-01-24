@@ -190,7 +190,6 @@ int main() {
 
     log::LOGGER.log(log::Logger::LogLevel::DEBUG, "Error code: %d\r\n", canNode.Error);
 
-
     while (1) {
         // Update the thermocouples values
         tmu.process();

@@ -50,7 +50,6 @@ int main() {
         TMU::DEV::MAX31855(spi, 3),
     };
 
-
     while (true) {
         //print temps and error array for csv friendly format
         uint16_t temps[4];
