@@ -1,3 +1,10 @@
+/**
+* This program reads temperatures from MAX31855 sensors and prints them,
+* along with error statuses, in a CSV-friendly format over UART.
+*
+* CSV format: temp1:, temp2:, temp3:, temp4:, error1:, error2:, error3:, error4:
+*/
+
 #include <EVT/io/UART.hpp>
 #include <EVT/io/pin.hpp>
 #include <EVT/manager.hpp>
@@ -46,13 +53,12 @@ int main() {
 
     while (true) {
         //print temps and error array for csv friendly format
-        //temp1: ,temp2: ,temp3: ,temp4:, error1: ,error2: ,error3: ,error4:
         uint16_t temps[4];
         TMU::DEV::MAX31855::MaxStatus errors[4];
         for (int i = 0; i < 4; i++) {
             errors[i] = MAXES[i].readTemp(temps[i]);
         }
-        uart.printf("temp1:%d, temp2:%d, temp3:%d, temp4:%d, error1:%d, error2:%d, error3:%d, error4:%d\r\n", temps[0], temps[1], temps[2], temps[3], errors[0], errors[1], errors[2], errors[3]);
+        uart.printf("%d, %d, %d, %d, %d, %d, %d, %d\r\n", temps[0], temps[1], temps[2], temps[3], errors[0], errors[1], errors[2], errors[3]);
 
         time::wait(200);
     }
