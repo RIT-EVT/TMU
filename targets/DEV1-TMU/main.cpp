@@ -4,8 +4,6 @@
  * enters.
  */
 
-#include <Canopen/co_core.h>
-#include <Canopen/co_tmr.h>
 #include <EVT/dev/Timer.hpp>
 #include <EVT/io/CANopen.hpp>
 #include <EVT/io/UART.hpp>
@@ -63,10 +61,6 @@ void canInterrupt(IO::CANMessage& message, void* priv) {
 extern "C" void CONodeFatalError(void) {}
 
 extern "C" void COIfCanReceive(CO_IF_FRM* frm) {}
-
-extern "C" int16_t COLssStore(uint32_t baudrate, uint8_t nodeId) { return 0; }
-
-extern "C" int16_t COLssLoad(uint32_t* baudrate, uint8_t* nodeId) { return 0; }
 
 extern "C" void CONmtModeChange(CO_NMT* nmt, CO_MODE mode) {}
 
