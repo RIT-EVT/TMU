@@ -1,7 +1,5 @@
 #pragma once
 
-#include <EVT/core/io/CANDevice.hpp>
-#include <EVT/core/io/CANopen.hpp>
 #include <EVT/io/CANopen.hpp>
 #include <EVT/io/SPI.hpp>
 #include <dev/MAX31855.hpp>
