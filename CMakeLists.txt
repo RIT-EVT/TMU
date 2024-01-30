@@ -39,20 +39,22 @@ file(STRINGS version.txt BOARD_VERSION)
 project(${BOARD_LIB_NAME}
         VERSION ${BOARD_VERSION}
         LANGUAGES CXX C
-        )
+)
+
+add_library(${PROJECT_NAME} STATIC)
 
 # Add sources
 target_sources(${PROJECT_NAME} PRIVATE
         src/TMU.cpp
         src/dev/MAX31855.cpp
-        )
+)
 
 ###############################################################################
 # Handle dependencies
 ###############################################################################
 target_link_libraries(${PROJECT_NAME}
         PUBLIC EVT
-        )
+)
 
 ###############################################################################
 # Install and expose library

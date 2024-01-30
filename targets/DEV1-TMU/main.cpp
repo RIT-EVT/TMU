@@ -4,7 +4,6 @@
  * enters.
  */
 
-#include <EVT/dev/Timer.hpp>
 #include <EVT/io/CANopen.hpp>
 #include <EVT/io/CANOpenMacros.hpp>
 #include <EVT/io/UART.hpp>
