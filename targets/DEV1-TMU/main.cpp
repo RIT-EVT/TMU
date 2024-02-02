@@ -32,34 +32,44 @@ namespace DEV = EVT::core::DEV;
  * @param message[in] The passed in CAN message that was read.
  */
 
+IO::UART& uart = IO::getUART<IO::Pin::UART_TX, IO::Pin::UART_RX>(9600);
+
 // create a can interrupt handler
 void canInterrupt(IO::CANMessage& message, void* priv) {
-    EVT::core::types::FixedQueue<CANOPEN_QUEUE_SIZE, IO::CANMessage>* queue =
-        (EVT::core::types::FixedQueue<CANOPEN_QUEUE_SIZE, IO::CANMessage>*) priv;
+    auto* queue = (EVT::core::types::FixedQueue<CANOPEN_QUEUE_SIZE, IO::CANMessage>*) priv;
 
-    // Log raw received data
-    log::LOGGER.log(log::Logger::LogLevel::DEBUG, "Got RAW message from %X of length %d with data: ", message.getId(), message.getDataLength());
-
+    //print out raw received data
+    uart.printf("Got RAW message from %X of length %d with data: ", message.getId(), message.getDataLength());
     uint8_t* data = message.getPayload();
     for (int i = 0; i < message.getDataLength(); i++) {
-        log::LOGGER.log(log::Logger::LogLevel::DEBUG, "%X ", *data);
+        uart.printf("%X ", *data);
         data++;
     }
+    uart.printf("\r\n");
 
     if (queue != nullptr)
         queue->append(message);
 }
 
+//setup a TPDO event handler to print the raw TPDO message when sending
+extern "C" void COPdoTransmit(CO_IF_FRM* frm) {
+    uart.printf("Sending PDO as 0x%X with length %d and data: ", frm->Identifier, frm->DLC);
+    uint8_t* data = frm->Data;
+    for (int i = 0; i < frm->DLC; i++) {
+        uart.printf("%X ", *data);
+        data++;
+    }
+    uart.printf("\r\n");
+}
+
+
+
 int main() {
     // Initialize system
     EVT::core::platform::init();
 
-    // Setup UART
-    IO::UART& uart = IO::getUART<IO::Pin::UART_TX, IO::Pin::UART_RX>(9600);
     log::LOGGER.setUART(&uart);
 
-    // Initialize the timer
-    DEV::Timer& timer = DEV::getTimer<DEV::MCUTimer::Timer2>(100);
 
     // Initialize SPI
     IO::GPIO* devices[NUM_THERMOCOUPLES];
@@ -85,8 +95,10 @@ int main() {
         TMU::DEV::MAX31855(spi, 3),
     };
 
+    //tpdo node
     TMU::TMU tmu = TMU::TMU(thermocouples);
 
+    DEV::Timer& timer = DEV::getTimer<DEV::MCUTimer::Timer2>(100);
 
     ///////////////////////////////////////////////////////////////////////////
     // Setup CAN configuration, this handles making drivers, applying settings.
