@@ -15,7 +15,7 @@ namespace TMU {
 /**
  * Handles thermo-couple data from the MAX31855 ADC and sends it over CANopen
  */
-class TMU {
+class TMU : public CANDevice {
 public:
     /**
      * Constructor takes an array 4 thermocouples
@@ -34,16 +34,23 @@ public:
     CO_OBJ_T* getObjectDictionary();
 
     /**
-     * Gets the size of the Object Dictionary
-     *
-     * @return size of the Object Dictionary
-     */
-    uint16_t getObjectDictionarySize() const;
-
-    /**
      * Updates the temperature values in an array and updates the error array from the TMU object.
      */
     void process();
+
+    /**
+     * Get the device's node ID
+     *
+     * @return The node ID of the can device.
+     */
+    uint8_t getNodeID() override;
+
+    /**
+     * Get the number of elements in the object dictionary.
+     *
+     * @return The number of elements in the object dictionary
+     */
+    uint8_t getNumElements() override;
 
 private:
     /**
@@ -64,7 +71,7 @@ private:
     /**
      * Object Dictionary Size
      */
-    static constexpr uint16_t OBJECT_DICTIONARY_SIZE = 69;
+    static constexpr uint16_t OBJECT_DICTIONARY_SIZE = 43;
 
     /**
      * CAN Open object dictionary
@@ -75,34 +82,38 @@ private:
         IDENTITY_OBJECT_1018,
         SDO_CONFIGURATION_1200,
 
-        // TPDO 0 Settings
-        TRANSMIT_PDO_SETTINGS_OBJECT_18XX(0x00, TRANSMIT_PDO_TRIGGER_TIMER, TRANSMIT_PDO_INHIBIT_TIME_DISABLE, 2000),
-        TRANSMIT_PDO_MAPPING_START_KEY_1AXX(0x00, 0x05),
-        TRANSMIT_PDO_MAPPING_ENTRY_1AXX(0x1800, 0x01, PDO_MAPPING_UNSIGNED8),
-        TRANSMIT_PDO_MAPPING_ENTRY_1AXX(0x1800, 0x02, PDO_MAPPING_UNSIGNED32),
-        TRANSMIT_PDO_MAPPING_ENTRY_1AXX(0x1800, 0x03, PDO_MAPPING_UNSIGNED8),
-        TRANSMIT_PDO_MAPPING_ENTRY_1AXX(0x1800, 0x04, PDO_MAPPING_UNSIGNED16),
-        TRANSMIT_PDO_MAPPING_ENTRY_1AXX(0x1800, 0x05, PDO_MAPPING_UNSIGNED16),
+        // TPDO 0 CONFIGURATION
+        TRANSMIT_PDO_SETTINGS_OBJECT_18XX(0, TRANSMIT_PDO_TRIGGER_TIMER, TRANSMIT_PDO_INHIBIT_TIME_DISABLE, 2000),
+        // TPDO 1 CONFIGURATION
+        TRANSMIT_PDO_SETTINGS_OBJECT_18XX(1, TRANSMIT_PDO_TRIGGER_TIMER, TRANSMIT_PDO_INHIBIT_TIME_DISABLE, 2000),
 
-        TRANSMIT_PDO_SETTINGS_OBJECT_18XX(0x01, TRANSMIT_PDO_TRIGGER_TIMER, TRANSMIT_PDO_INHIBIT_TIME_DISABLE, 2000),
-        TRANSMIT_PDO_MAPPING_START_KEY_1AXX(0x00, 0x05),
-        TRANSMIT_PDO_MAPPING_ENTRY_1AXX(0x1801, 0x01, PDO_MAPPING_UNSIGNED8),
-        TRANSMIT_PDO_MAPPING_ENTRY_1AXX(0x1801, 0x02, PDO_MAPPING_UNSIGNED32),
-        TRANSMIT_PDO_MAPPING_ENTRY_1AXX(0x1801, 0x03, PDO_MAPPING_UNSIGNED8),
-        TRANSMIT_PDO_MAPPING_ENTRY_1AXX(0x1801, 0x04, PDO_MAPPING_UNSIGNED16),
-        TRANSMIT_PDO_MAPPING_ENTRY_1AXX(0x1801, 0x05, PDO_MAPPING_UNSIGNED16),
+        // TPDO 0 MAPPING
+        TRANSMIT_PDO_MAPPING_START_KEY_1AXX(0, 4),
+        TRANSMIT_PDO_MAPPING_ENTRY_1AXX(0, 1, PDO_MAPPING_UNSIGNED32),
+        TRANSMIT_PDO_MAPPING_ENTRY_1AXX(0, 2, PDO_MAPPING_UNSIGNED32),
+        TRANSMIT_PDO_MAPPING_ENTRY_1AXX(0, 3, PDO_MAPPING_UNSIGNED32),
+        TRANSMIT_PDO_MAPPING_ENTRY_1AXX(0, 4, PDO_MAPPING_UNSIGNED32),
 
-        DATA_LINK_START_KEY_21XX(0, 0x05),
-        DATA_LINK_21XX(0x1A00, 0x01, CO_TUNSIGNED32, (uintptr_t) &thermTemps[0]),
-        DATA_LINK_21XX(0x1A00, 0x02, CO_TUNSIGNED32, (uintptr_t) &thermTemps[1]),
-        DATA_LINK_21XX(0x1A00, 0x03, CO_TUNSIGNED32, (uintptr_t) &thermTemps[2]),
-        DATA_LINK_21XX(0x1A00, 0x04, CO_TUNSIGNED32, (uintptr_t) &thermTemps[3]),
+        // TPDO 1 MAPPING
+        TRANSMIT_PDO_MAPPING_START_KEY_1AXX(1, 4),
+        TRANSMIT_PDO_MAPPING_ENTRY_1AXX(1, 1, PDO_MAPPING_UNSIGNED32),
+        TRANSMIT_PDO_MAPPING_ENTRY_1AXX(1, 2, PDO_MAPPING_UNSIGNED32),
+        TRANSMIT_PDO_MAPPING_ENTRY_1AXX(1, 3, PDO_MAPPING_UNSIGNED32),
+        TRANSMIT_PDO_MAPPING_ENTRY_1AXX(1, 4, PDO_MAPPING_UNSIGNED32),
 
-        DATA_LINK_START_KEY_21XX(1, 0x05),
-        DATA_LINK_21XX(0x1A01, 0x01, CO_TUNSIGNED32, (uintptr_t) &err_arr[0]),
-        DATA_LINK_21XX(0x1A01, 0x02, CO_TUNSIGNED32, (uintptr_t) &err_arr[1]),
-        DATA_LINK_21XX(0x1A01, 0x03, CO_TUNSIGNED32, (uintptr_t) &err_arr[2]),
-        DATA_LINK_21XX(0x1A01, 0x04, CO_TUNSIGNED32, (uintptr_t) &err_arr[3]),
+        // TPDO 0 DATA LINKS
+        DATA_LINK_START_KEY_21XX(0, 4),
+        DATA_LINK_21XX(0, 1, CO_TUNSIGNED32, (uintptr_t) &thermTemps[0]),
+        DATA_LINK_21XX(0, 2, CO_TUNSIGNED32, (uintptr_t) &thermTemps[1]),
+        DATA_LINK_21XX(0, 3, CO_TUNSIGNED32, (uintptr_t) &thermTemps[2]),
+        DATA_LINK_21XX(0, 4, CO_TUNSIGNED32, (uintptr_t) &thermTemps[3]),
+
+        // TPDO 1 DATA LINKS
+        DATA_LINK_START_KEY_21XX(1, 4),
+        DATA_LINK_21XX(1, 1, CO_TUNSIGNED32, (uintptr_t) &err_arr[0]),
+        DATA_LINK_21XX(1, 2, CO_TUNSIGNED32, (uintptr_t) &err_arr[1]),
+        DATA_LINK_21XX(1, 3, CO_TUNSIGNED32, (uintptr_t) &err_arr[2]),
+        DATA_LINK_21XX(1, 4, CO_TUNSIGNED32, (uintptr_t) &err_arr[3]),
 
         CO_OBJ_DICT_ENDMARK,
     };

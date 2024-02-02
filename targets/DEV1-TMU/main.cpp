@@ -1,9 +1,3 @@
-/**
- * This is a basic sample of using the UART module. The program provides a
- * basic echo functionality where the uart will write back whatever the user
- * enters.
- */
-
 #include <EVT/io/CANopen.hpp>
 #include <EVT/io/CANOpenMacros.hpp>
 #include <EVT/io/UART.hpp>
@@ -12,6 +6,7 @@
 #include <EVT/utils/log.hpp>
 #include <EVT/utils/time.hpp>
 
+#include "../../libs/EVT-core/samples/canopen/canopen_tpdo/TPDOCanNode.hpp"
 #include <EVT/dev/MCUTimer.hpp>
 #include <TMU.hpp>
 #include <dev/MAX31855.hpp>
@@ -92,84 +87,68 @@ int main() {
 
     TMU::TMU tmu = TMU::TMU(thermocouples);
 
-    /**
-     * Initialize CAN
-     */
-    //Will store CANopen messages that will be populated by the EVT-core CAN interrupt
-    EVT::core::types::FixedQueue<CANOPEN_QUEUE_SIZE, IO::CANMessage> canOpenQueue;
-
-    // Initialize CAN, add an IRQ which will add messages to the queue above
-    IO::CAN& can = IO::getCAN<IO::Pin::PA_12, IO::Pin::PA_11>();
-    can.addIRQHandler(canInterrupt, reinterpret_cast<void*>(&canOpenQueue));
-
-    // Attempt to join the CAN network
-    IO::CAN::CANStatus result = can.connect();
-
-    // Check to see if the device is connected to the CAN network
-    if (result != IO::CAN::CANStatus::OK) {
-        log::LOGGER.log(log::Logger::LogLevel::ERROR, "Failed to connect to CAN network\r\n");
-        return 1;
-    } else {
-        log::LOGGER.log(log::Logger::LogLevel::INFO, "Connected to CAN network\r\n");
-    }
 
     ///////////////////////////////////////////////////////////////////////////
     // Setup CAN configuration, this handles making drivers, applying settings.
     // And generally creating the CANopen stack node which is the interface
     // between the application (the code we write) and the physical CAN network
     ///////////////////////////////////////////////////////////////////////////
-    // Make drivers
+
+    // Will store CANopen messages that will be populated by the EVT-core CAN
+    // interrupt
+    EVT::core::types::FixedQueue<CANOPEN_QUEUE_SIZE, IO::CANMessage> canOpenQueue;
+
+    // Initialize CAN, add an IRQ which will add messages to the queue above
+    IO::CAN& can = IO::getCAN<IO::Pin::PA_12, IO::Pin::PA_11>();
+    can.addIRQHandler(canInterrupt, reinterpret_cast<void*>(&canOpenQueue));
+
+    // Reserved memory for CANopen stack usage
+    uint8_t sdoBuffer[CO_SSDO_N * CO_SDO_BUF_BYTE];
+    CO_TMR_MEM appTmrMem[16];
+
+    // Reserve driver variables
     CO_IF_DRV canStackDriver;
 
     CO_IF_CAN_DRV canDriver;
     CO_IF_TIMER_DRV timerDriver;
     CO_IF_NVM_DRV nvmDriver;
 
-    IO::getCANopenCANDriver(&can, &canOpenQueue, &canDriver);
-    IO::getCANopenTimerDriver(&timer, &timerDriver);
-    IO::getCANopenNVMDriver(&nvmDriver);
-
-    canStackDriver.Can = &canDriver;
-    canStackDriver.Timer = &timerDriver;
-    canStackDriver.Nvm = &nvmDriver;
-
-    // Reserved memory for CANopen stack usage
-    uint8_t sdoBuffer[1][CO_SDO_BUF_BYTE];
-    CO_TMR_MEM appTmrMem[4];
-
-    //setup CANopen Node
-    CO_NODE_SPEC canSpec = {
-        .NodeId = TMU::TMU::NODE_ID,
-        .Baudrate = IO::CAN::DEFAULT_BAUD,
-        .Dict = tmu.getObjectDictionary(),
-        .DictLen = tmu.getObjectDictionarySize(),
-        .EmcyCode = NULL,
-        .TmrMem = appTmrMem,
-        .TmrNum = 16,
-        .TmrFreq = 100,
-        .Drv = &canStackDriver,
-        .SdoBuf = reinterpret_cast<uint8_t*>(&sdoBuffer[0]),
-    };
-
     CO_NODE canNode;
 
-    CONodeInit(&canNode, &canSpec);
-    CONodeStart(&canNode);
+    // Attempt to join the CAN network
+    IO::CAN::CANStatus result = can.connect();
+
+    //test that the board is connected to the can network
+    if (result != IO::CAN::CANStatus::OK) {
+        uart.printf("Failed to connect to CAN network\r\n");
+        return 1;
+    }
+
+    // Initialize all the CANOpen drivers.
+    IO::initializeCANopenDriver(&canOpenQueue, &can, &timer, &canStackDriver, &nvmDriver, &timerDriver, &canDriver);
+
+    // Initialize the CANOpen node we are using.
+    IO::initializeCANopenNode(&canNode, &tmu, &canStackDriver, sdoBuffer, appTmrMem);
+
+    // Set the node to operational mode
     CONmtSetMode(&canNode.Nmt, CO_OPERATIONAL);
 
-    log::LOGGER.log(log::Logger::LogLevel::DEBUG, "Error code: %d\r\n", canNode.Error);
+    time::wait(500);
 
+    //print any CANopen errors
+    uart.printf("Error: %d\r\n", CONodeGetErr(&canNode));
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Main loop
+    ///////////////////////////////////////////////////////////////////////////
 
     while (1) {
-        // Update the thermocouples values
+        uart.printf("Testing TMU process\r\n");
+
         tmu.process();
 
-        CONodeProcess(&canNode);
-        // Update the state of timer based events
-        COTmrService(&canNode.Tmr);
-        // Handle executing timer events that have elapsed
-        COTmrProcess(&canNode.Tmr);
-        // Wait for new data to come in
-        time::wait(100);
+        IO::processCANopenNode(&canNode);
+
+        time::wait(1000);
     }
 }
