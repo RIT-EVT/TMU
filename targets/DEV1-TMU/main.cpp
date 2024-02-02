@@ -155,7 +155,6 @@ int main() {
     ///////////////////////////////////////////////////////////////////////////
 
     while (1) {
-
         uart.printf("Testing TMU process\r\n");
         tmu.process();
         IO::processCANopenNode(&canNode);
