@@ -51,7 +51,7 @@ void canInterrupt(IO::CANMessage& message, void* priv) {
         queue->append(message);
 }
 
-//setup a TPDO event handler to print the raw TPDO message when sending
+//TPDO event handler to print the raw TPDO message when sending
 extern "C" void COPdoTransmit(CO_IF_FRM* frm) {
     uart.printf("Sending PDO as 0x%X with length %d and data: ", frm->Identifier, frm->DLC);
     uint8_t* data = frm->Data;
@@ -155,12 +155,10 @@ int main() {
     ///////////////////////////////////////////////////////////////////////////
 
     while (1) {
+
         uart.printf("Testing TMU process\r\n");
-
         tmu.process();
-
         IO::processCANopenNode(&canNode);
-
         time::wait(1000);
     }
 }
