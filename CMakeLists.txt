@@ -43,10 +43,6 @@ project(${BOARD_LIB_NAME}
 
 add_library(${PROJECT_NAME} STATIC)
 
-add_library(${PROJECT_NAME} STATIC
-        targets/cal_test/main.cpp
-)
-
 # Add sources
 target_sources(${PROJECT_NAME} PRIVATE
         src/TMU.cpp
