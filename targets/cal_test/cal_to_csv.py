@@ -9,7 +9,7 @@ ser = serial.Serial(com_port, 9600)  # Replace the COM port with the one you're 
 try:
     while True:
         # Generate a new file name with timestamp
-        csv_file_path = f'sensor_data.csv'
+        csv_file_path = 'sensor_data.csv'
 
         # Open a new CSV file for writing
         with open(csv_file_path, 'w', newline='') as csv_file:
