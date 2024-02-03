@@ -1,5 +1,5 @@
-#include <EVT/io/CANopen.hpp>
 #include <EVT/io/CANOpenMacros.hpp>
+#include <EVT/io/CANopen.hpp>
 #include <EVT/io/UART.hpp>
 #include <EVT/io/pin.hpp>
 #include <EVT/manager.hpp>
@@ -62,14 +62,11 @@ extern "C" void COPdoTransmit(CO_IF_FRM* frm) {
     uart.printf("\r\n");
 }
 
-
-
 int main() {
     // Initialize system
     EVT::core::platform::init();
 
     log::LOGGER.setUART(&uart);
-
 
     // Initialize SPI
     IO::GPIO* devices[NUM_THERMOCOUPLES];

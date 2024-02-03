@@ -2,8 +2,8 @@
 
 #include <EVT/io/CANDevice.hpp>
 #include <EVT/io/CANOpenMacros.hpp>
-#include <co_core.h>
 #include <EVT/io/SPI.hpp>
+#include <co_core.h>
 #include <dev/MAX31855.hpp>
 
 #define NUM_THERMOCOUPLES 4
