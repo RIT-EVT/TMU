@@ -17,7 +17,6 @@ uint8_t TMU::getNodeID() {
     return NODE_ID;
 }
 
-
 void TMU::process() {
     for (int i = 0; i < NUM_THERMOCOUPLES; i++) {
         err_arr[i] = thermocouples[i].readTemp(thermTemps[i]);
