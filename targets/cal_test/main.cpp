@@ -51,7 +51,7 @@ int main() {
         for (int i = 0; i < 4; i++) {
             errors[i] = MAXES[i].readTemp(temps[i]);
         }
-        uart.printf("temp1:%d, temp2:%d, temp3:%d, temp4:%d, error1:%d, error2:%d, error3:%d, error4:%d\r\n", temps[0], temps[1], temps[2], temps[3], errors[0], errors[1], errors[2], errors[3]);
+        uart.printf("%d, %d, %d, %d, %d, %d, %d, %d\r\n", temps[0], temps[1], temps[2], temps[3], errors[0], errors[1], errors[2], errors[3]);
 
         time::wait(200);
     }

@@ -5,8 +5,6 @@
 #include <EVT/manager.hpp>
 #include <EVT/utils/log.hpp>
 #include <EVT/utils/time.hpp>
-
-#include "../../libs/EVT-core/samples/canopen/canopen_tpdo/TPDOCanNode.hpp"
 #include <EVT/dev/MCUTimer.hpp>
 #include <TMU.hpp>
 #include <dev/MAX31855.hpp>
@@ -32,40 +30,32 @@ namespace DEV = EVT::core::DEV;
  * @param message[in] The passed in CAN message that was read.
  */
 
-IO::UART& uart = IO::getUART<IO::Pin::UART_TX, IO::Pin::UART_RX>(9600);
-
 // create a can interrupt handler
 void canInterrupt(IO::CANMessage& message, void* priv) {
-    auto* queue = (EVT::core::types::FixedQueue<CANOPEN_QUEUE_SIZE, IO::CANMessage>*) priv;
+    EVT::core::types::FixedQueue<CANOPEN_QUEUE_SIZE, IO::CANMessage>* queue =
+        (EVT::core::types::FixedQueue<CANOPEN_QUEUE_SIZE, IO::CANMessage>*) priv;
 
-    //print out raw received data
-    uart.printf("Got RAW message from %X of length %d with data: ", message.getId(), message.getDataLength());
+    // Log raw received data
+    log::LOGGER.log(log::Logger::LogLevel::DEBUG, "Got RAW message from %X of length %d with data: ", message.getId(), message.getDataLength());
+
     uint8_t* data = message.getPayload();
     for (int i = 0; i < message.getDataLength(); i++) {
-        uart.printf("%X ", *data);
+        log::LOGGER.log(log::Logger::LogLevel::DEBUG, "%X ", *data);
         data++;
     }
-    uart.printf("\r\n");
 
     if (queue != nullptr)
         queue->append(message);
 }
 
-//TPDO event handler to print the raw TPDO message when sending
-extern "C" void COPdoTransmit(CO_IF_FRM* frm) {
-    uart.printf("Sending PDO as 0x%X with length %d and data: ", frm->Identifier, frm->DLC);
-    uint8_t* data = frm->Data;
-    for (int i = 0; i < frm->DLC; i++) {
-        uart.printf("%X ", *data);
-        data++;
-    }
-    uart.printf("\r\n");
-}
+
+
 
 int main() {
     // Initialize system
     EVT::core::platform::init();
 
+    IO::UART& uart = IO::getUART<IO::Pin::UART_TX, IO::Pin::UART_RX>(9600);
     log::LOGGER.setUART(&uart);
 
     // Initialize SPI
@@ -92,7 +82,6 @@ int main() {
         TMU::DEV::MAX31855(spi, 3),
     };
 
-    //tpdo node
     TMU::TMU tmu = TMU::TMU(thermocouples);
 
     DEV::Timer& timer = DEV::getTimer<DEV::MCUTimer::Timer2>(100);
@@ -111,6 +100,18 @@ int main() {
     IO::CAN& can = IO::getCAN<IO::Pin::PA_12, IO::Pin::PA_11>();
     can.addIRQHandler(canInterrupt, reinterpret_cast<void*>(&canOpenQueue));
 
+    // Attempt to join the CAN network
+    IO::CAN::CANStatus result = can.connect();
+
+    // Check to see if the device is connected to the CAN network
+    if (result != IO::CAN::CANStatus::OK) {
+        log::LOGGER.log(log::Logger::LogLevel::ERROR, "Failed to connect to CAN network\r\n");
+        return 1;
+    } else {
+        log::LOGGER.log(log::Logger::LogLevel::INFO, "Connected to CAN network\r\n");
+    }
+
+
     // Reserved memory for CANopen stack usage
     uint8_t sdoBuffer[CO_SSDO_N * CO_SDO_BUF_BYTE];
     CO_TMR_MEM appTmrMem[16];
@@ -124,15 +125,6 @@ int main() {
 
     CO_NODE canNode;
 
-    // Attempt to join the CAN network
-    IO::CAN::CANStatus result = can.connect();
-
-    //test that the board is connected to the can network
-    if (result != IO::CAN::CANStatus::OK) {
-        uart.printf("Failed to connect to CAN network\r\n");
-        return 1;
-    }
-
     // Initialize all the CANOpen drivers.
     IO::initializeCANopenDriver(&canOpenQueue, &can, &timer, &canStackDriver, &nvmDriver, &timerDriver, &canDriver);
 
@@ -144,15 +136,11 @@ int main() {
 
     time::wait(500);
 
-    //print any CANopen errors
-    uart.printf("Error: %d\r\n", CONodeGetErr(&canNode));
-
     ///////////////////////////////////////////////////////////////////////////
     // Main loop
     ///////////////////////////////////////////////////////////////////////////
 
     while (1) {
-        uart.printf("Testing TMU process\r\n");
         tmu.process();
         IO::processCANopenNode(&canNode);
         time::wait(1000);
