@@ -49,8 +49,6 @@ int main() {
     };
 
     while (true) {
-        //print temps and error array for csv friendly format
-        //temp1: ,temp2: ,temp3: ,temp4:, error1: ,error2: ,error3: ,error4:
         uint16_t temps[4];
         TMU::DEV::MAX31855::MaxStatus errors[4];
         for (int i = 0; i < 4; i++) {
