@@ -3,6 +3,7 @@
  * The target is a simple program that reads the temperature from the thermocouples and sends the data to the CANopen network
  */
 
+#include <EVT/dev/MCUTimer.hpp>
 #include <EVT/io/CANOpenMacros.hpp>
 #include <EVT/io/CANopen.hpp>
 #include <EVT/io/UART.hpp>
@@ -10,7 +11,6 @@
 #include <EVT/manager.hpp>
 #include <EVT/utils/log.hpp>
 #include <EVT/utils/time.hpp>
-#include <EVT/dev/MCUTimer.hpp>
 #include <TMU.hpp>
 #include <dev/MAX31855.hpp>
 
@@ -52,9 +52,6 @@ void canInterrupt(IO::CANMessage& message, void* priv) {
     if (queue != nullptr)
         queue->append(message);
 }
-
-
-
 
 int main() {
     // Initialize system
@@ -115,7 +112,6 @@ int main() {
     } else {
         log::LOGGER.log(log::Logger::LogLevel::INFO, "Connected to CAN network\r\n");
     }
-
 
     // Reserved memory for CANopen stack usage
     uint8_t sdoBuffer[CO_SSDO_N * CO_SDO_BUF_BYTE];
