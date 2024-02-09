@@ -9,8 +9,12 @@ CO_OBJ_T* TMU::getObjectDictionary() {
     return objectDictionary;
 }
 
-uint16_t TMU::getObjectDictionarySize() const {
+uint8_t TMU::getNumElements() {
     return OBJECT_DICTIONARY_SIZE;
+}
+
+uint8_t TMU::getNodeID() {
+    return NODE_ID;
 }
 
 void TMU::process() {
