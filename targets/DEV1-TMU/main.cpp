@@ -1,3 +1,8 @@
+/**
+ * The purpose this target is to export the temperature data from the thermocouples to the CANopen network.
+ * The target is a simple program that reads the temperature from the thermocouples and sends the data to the CANopen network
+ */
+
 #include <EVT/io/CANOpenMacros.hpp>
 #include <EVT/io/CANopen.hpp>
 #include <EVT/io/UART.hpp>

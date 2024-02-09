@@ -1,3 +1,8 @@
+/**
+ * The purpose of this target is to export the temperature data from the thermocouples to a CSV file.
+ * The target is a simple program that reads the temperature from the thermocouples and prints the data to UART
+ */
+
 #include <EVT/io/UART.hpp>
 #include <EVT/io/pin.hpp>
 #include <EVT/manager.hpp>
